@@ -1,185 +1,141 @@
-📚 Chaptered
+# 📚 Chaptered
 
-A social reading platform to track books, build habits, and connect through book clubs.
+> **Turn reading from a solo habit into a shared experience.**
 
-🚀 Live Demo: Coming Soon
-📖 Docs: TECHNICAL_PLAN.md
+Chaptered is an open-source social reading platform — currently in the idea stage and being built from scratch. If you love reading and want to help build something meaningful, you're in the right place.
 
-🌟 What is Chaptered?
+---
 
-Chaptered is a full-stack web application designed to make reading more engaging, social, and consistent.
+## 🌱 Project Status
 
-It combines:
+**This project is at day zero.** No code has been written yet. We're laying the foundation — defining what we're building, how it'll work, and how contributors can get involved early.
 
-📖 Personal reading tracking
-👥 Book clubs & discussions
-📊 Reading analytics
+This is a great time to join. You can shape the direction of the project, pick up foundational tasks, and grow alongside the codebase.
 
-Built as a 7-day MVP, it showcases scalable architecture, real-time features, and modern dev practices using React, Node.js, and MongoDB.
+---
 
-🧩 Features
-✅ Current (MVP - Phase 1)
+## 💡 The Idea
 
-🔐 Authentication
+Most reading apps treat reading as a solo activity. Chaptered wants to change that.
 
-JWT-based login/signup
-Secure password hashing
-Persistent sessions
+The goal is a web app that combines:
 
-📖 Reading Tracker
+- 📖 **Personal reading tracking** — log books, record sessions, build streaks
+- 📊 **Reading insights** — see your habits, progress, and stats over time
+- 👥 **Book clubs** — create or join clubs, read together, vote on next books
+- 💬 **Real-time discussion** — chat with your club as you read
 
-Add books (manual + Google Books API)
-Track reading sessions (pages + time)
-Reading streaks & stats
+Less "books gathering dust." More "stories sparking conversations."
 
-📊 Dashboard
+---
 
-Active books overview
-Weekly reading insights
-Quick session logging
+## 🗺️ Planned Features
 
-🔍 Book Discovery
+These are the features we're planning to build, roughly in order.
 
-Search via Google Books API
-One-click add
-Manual entry support
+### Phase 1 — MVP
+- [ ] User authentication (sign up, log in, sessions)
+- [ ] Book search via Google Books API + manual entry
+- [ ] Reading session logging (pages read, time spent)
+- [ ] Reading streaks and basic stats
+- [ ] Personal dashboard
+- [ ] Book clubs (create, join via invite code)
+- [ ] Real-time club chat (Socket.io)
+- [ ] Book voting within clubs
 
-👥 Book Clubs
+### Phase 2
+- [ ] Premium tier (Stripe)
+- [ ] AI reading coach
+- [ ] Personalized book recommendations
 
-Create/join clubs
-Invite via code
-Track member progress
+### Phase 3+
+- [ ] Mobile app (React Native)
+- [ ] Video book club meetings
+- [ ] Reading challenges and badges
+- [ ] Push notifications
 
-💬 Real-Time Chat
+---
 
-Socket.io powered messaging
-Persistent history
-Timestamps
+## 🛠️ Planned Tech Stack
 
-🗳️ Book Voting
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
+| State management | Zustand |
+| Backend | Node.js, Express, TypeScript |
+| Database | MongoDB + Mongoose |
+| Auth | JWT |
+| Real-time | Socket.io |
+| Deployment | Vercel (frontend), Railway (backend), MongoDB Atlas |
 
-Suggest books
-Vote within clubs
-Auto-select winning book
-🚧 Upcoming (Phase 2)
-💳 Stripe-based premium tier
-🤖 AI Reading Coach
-🎯 Personalized recommendations
-🧠 Spoiler-free discussions
-🔮 Future Vision (Phase 3+)
-📱 Mobile app (React Native)
-📞 Video book club meetings
-🔔 Push notifications
-🏆 Reading challenges & badges
-🛠️ Tech Stack
-Frontend
-React 18 + TypeScript
-Vite
-Tailwind CSS
-Zustand
-React Router
-Axios
-Socket.io Client
-Backend
-Node.js + Express
-TypeScript
-MongoDB + Mongoose
-JWT Auth
-Socket.io
-DevOps
-Vercel (Frontend)
-Railway / Heroku (Backend)
-MongoDB Atlas
-📁 Project Structure
+> These choices aren't locked in stone yet. If you have a strong opinion on any of them, open a discussion!
+
+---
+
+## 📁 Planned Project Structure
+
+```
 chaptered/
-├── chaptered-web/    # React frontend
-├── chaptered-api/    # Node.js backend
+├── chaptered-web/     ← React frontend
+├── chaptered-api/     ← Node.js backend
 └── README.md
-🚀 Getting Started
-1. Clone Repo
-git clone https://github.com/yourusername/chaptered.git
-cd chaptered
-2. Setup Frontend
-cd chaptered-web
-npm install
-npm run dev
-3. Setup Backend
-cd chaptered-api
-npm install
-npm run dev
-4. Environment Variables
+```
 
-Backend .env
+---
 
-PORT=5000
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_secret
-FRONTEND_URL=http://localhost:5173
+## 🤝 How to Get Involved
 
-Frontend .env.local
+We're actively looking for contributors to help build Chaptered from the ground up.
 
-VITE_API_URL=http://localhost:5000/api
-📡 API Overview
-Method	Endpoint	Description
-POST	/auth/signup	Register user
-POST	/auth/login	Login
-GET	/auth/me	Current user
-GET	/books	Get books
-POST	/books	Add book
-POST	/books/:id/sessions	Log session
+### What we need right now
 
-👉 Full API: TECHNICAL_PLAN.md
+- **Project setup** — scaffolding the frontend and backend repos
+- **Database schema design** — modeling users, books, clubs, sessions
+- **API design** — defining the routes and contract between frontend and backend
+- **UI/UX** — wireframes, component design, design system decisions
+- **Discussions** — help shape features, tech decisions, and priorities
 
-🔐 Authentication Flow
-User logs in/signup
-Backend returns JWT
-Token stored in frontend
-Sent via Authorization: Bearer <token>
-Middleware verifies requests
-🧪 Testing
-Backend
-curl http://localhost:5000/api/health
-Frontend
-Test signup/login
-Verify dashboard loads
-Check API calls in DevTools
-🚀 Deployment
-Frontend (Vercel)
-Connect repo
-Set VITE_API_URL
-Deploy
-Backend (Railway)
-Add environment variables
-Deploy via GitHub
-🤝 Contributing
+### To contribute
 
-We welcome contributions!
+1. **Browse or open issues** — check what's being discussed or propose something new
+2. **Join the conversation** — use GitHub Discussions for questions, ideas, and feedback
+3. **Pick something up** — grab an open issue, comment that you're working on it, and go
 
-Steps
-git checkout -b feature/your-feature
-git commit -m "feat: add new feature"
-git push origin feature/your-feature
+No contribution is too small. Questions, suggestions, and opinions are just as valuable as code right now.
 
-Then open a Pull Request 🚀
+---
 
-Contribution Guidelines: 
-1. Use TypeScript
-2. Follow existing structure
-3. Keep functions small
-4. Write clear commit messages
+## 📋 Contribution Guidelines
 
-🐛 Issues & Support
-Open an issue for bugs
-Use discussions for ideas
-Include reproduction steps
+*(To be expanded as the project grows)*
 
-MIT License
+When we do start writing code, we'll follow these principles:
 
-👩‍💻 Maintainer
+- Use TypeScript throughout
+- Keep functions small and focused
+- Follow the existing folder structure
+- Write clear commit messages using conventional commits:
+  - `feat:` — new feature
+  - `fix:` — bug fix
+  - `docs:` — documentation
+  - `chore:` — setup, config, tooling
 
-Vanshika Sharma
-Open to collaborations and contributions!
+---
 
-💡 Why This Project Matters
+## 🐛 Issues & Discussions
 
-Chaptered isn’t just a tracker. It’s trying to turn reading from a solo habit into a shared experience. Less “books gathering dust,” more “stories sparking conversations.”
+- **Have an idea?** → Open a [GitHub Discussion](https://github.com/vanshika114/Chaptered/discussions)
+- **Found a problem or want to propose something specific?** → Open an [Issue](https://github.com/vanshika114/Chaptered/issues)
+- **Not sure where to start?** → Say hi in Discussions — we'll help point you in the right direction
+
+---
+
+## 📜 License
+
+MIT — free to use, modify, and distribute.
+
+---
+
+## 👩‍💻 Maintainer
+
+**Vanshika Sharma** — open to collaborations and contributions. Building in public, one chapter at a time.
