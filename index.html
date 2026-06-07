@@ -1509,9 +1509,10 @@ a { color: inherit; }
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How it Works</a></li>
     <li><a href="#why">Why Read</a></li>
-    <li><a href="#library">Library</a></li>
+    <li><a href="library.html" class="active">Library</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
   </ul>
+
   <a href="#library" class="btn btn-primary btn-sm nav-cta">Start Reading</a>
 
   <button class="nav-hamburger" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawer">
@@ -1567,9 +1568,32 @@ a { color: inherit; }
         <div class="hero-stat-num" id="heroStreak">0</div>
         <div class="hero-stat-label">Day Streak 🔥</div>
       </div>
+=======
+  <button class="mbtn" id="mb" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 22 22"><rect y="3" width="22" height="2" rx="1" fill="#1a1208"/><rect y="10" width="22" height="2" rx="1" fill="#1a1208"/><rect y="17" width="22" height="2" rx="1" fill="#1a1208"/></svg>
+  </button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-wm">📚</div>
+  <div class="hero-inner">
+    <div class="badge">📚 Social Reading Platform · MVP Phase 1</div>
+    <h1>Read <em>Together</em>,<br/>Grow Together.</h1>
+    <p>Chaptered turns reading from a solo habit into a shared experience — track books, log sessions, build streaks, and read right in your browser.</p>
+    <div class="actions">
+      <a href="library.html" class="btn">Start Reading →</a>
+      <a href="#features" class="btn-o">Explore Features</a>
+    </div>
+    <div class="stats">
+      <div><div class="sn" id="hb">0</div><div class="sl">Books Added</div></div>
+      <div><div class="sn" id="hp">0</div><div class="sl">Pages Read</div></div>
+      <div><div class="sn" id="hs">0</div><div class="sl">Day Streak 🔥</div></div>
+
     </div>
   </div>
 </section>
+
 
 <!-- ═══ FEATURES ═══ -->
 <section class="section section-warm" id="features" aria-labelledby="featuresHeading">
@@ -2246,6 +2270,112 @@ document.querySelectorAll('.reveal, .features-grid, .how-grid, .roadmap-grid, .b
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 updateHeroStats();
 renderShelf();
+=======
+<section class="features" id="features">
+  <div class="fh">
+    <div class="stag">Features</div>
+    <h2 class="stitle">Everything you need to read more</h2>
+    <p class="ssub">From personal tracking to social clubs, Chaptered has all the tools to make reading a habit you love.</p>
+  </div>
+  <div class="fg">
+    <div class="fc"><div class="fi a">🔐</div><h3>Authentication</h3><p>JWT-based login & signup with secure password hashing and persistent sessions across devices.</p></div>
+    <div class="fc"><div class="fi g">📖</div><h3>Reading Tracker</h3><p>Add books manually or via search. Log reading sessions with pages and time. Build streaks.</p></div>
+    <div class="fc"><div class="fi a">📊</div><h3>Dashboard</h3><p>Active books overview, weekly reading insights, and quick session logging all in one view.</p></div>
+    <div class="fc"><div class="fi g">📚</div><h3>In-Browser Reader</h3><p>Upload a PDF and read it directly in Chaptered — no downloads, no external apps needed.</p></div>
+    <div class="fc"><div class="fi a">👥</div><h3>Book Clubs</h3><p>Create or join clubs with invite codes. Track member reading progress together.</p></div>
+    <div class="fc"><div class="fi g">💬</div><h3>Real-Time Chat</h3><p>Socket.io powered messaging with persistent history and timestamps inside every club.</p></div>
+    <div class="fc"><div class="fi a">🗳️</div><h3>Book Voting</h3><p>Suggest books, vote within clubs, and let the community auto-select the next read.</p></div>
+    <div class="fc"><div class="fi g">🤖</div><h3>AI Reading Coach</h3><p>Personalized recommendations, spoiler-free discussions, and an intelligent reading assistant.</p></div>
+    <div class="fc"><div class="fi a">📱</div><h3>Mobile App</h3><p>React Native mobile app, push notifications, video book club meetings, and reading challenges.</p></div>
+  </div>
+</section>
+
+<section id="how">
+  <div style="text-align:center">
+    <div class="stag">How it Works</div>
+    <h2 class="stitle">Up and reading in minutes</h2>
+    <p class="ssub" style="margin:.7rem auto 0">Sign up, add your books, and start your reading journey with your community.</p>
+  </div>
+  <div class="hg">
+    <div class="hs"><div class="hn">1</div><h3>Create an Account</h3><p>Sign up in seconds with a secure JWT-authenticated account that keeps your data private.</p></div>
+    <div class="hs"><div class="hn">2</div><h3>Add Your Books</h3><p>Enter title, author, genre and pages. Optionally upload a PDF to read it right inside Chaptered.</p></div>
+    <div class="hs"><div class="hn">3</div><h3>Log Sessions</h3><p>Track every reading session — how many pages, a quick note. Watch your progress bar fill up.</p></div>
+    <div class="hs"><div class="hn">4</div><h3>Build Your Streak</h3><p>Log daily sessions, watch your streaks grow, and see your stats live on the hero panel.</p></div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div style="text-align:center">
+    <div class="stag">Why Reading Matters</div>
+    <h2 class="stitle">The quiet superpower</h2>
+    <p class="ssub" style="margin:.7rem auto 0">Reading isn't just a hobby — it's one of the most powerful habits you can build.</p>
+  </div>
+  <div class="bg">
+    <div class="bc"><span class="bi">🧠</span><h3>Sharpens Your Mind</h3><p>Regular reading keeps the brain active, improves memory retention, and slows cognitive decline over time.</p></div>
+    <div class="bc"><span class="bi">💬</span><h3>Builds Empathy</h3><p>Fiction readers consistently score higher on empathy tests — stepping into characters' lives broadens your emotional range.</p></div>
+    <div class="bc"><span class="bi">😌</span><h3>Reduces Stress</h3><p>Just six minutes of reading can reduce stress levels by up to 68% — more effective than music or a walk.</p></div>
+    <div class="bc"><span class="bi">✍️</span><h3>Improves Writing</h3><p>Reading widely exposes you to different styles, vocabularies, and structures that naturally enrich your own writing.</p></div>
+  </div>
+</section>
+
+<section>
+  <div style="text-align:center">
+    <div class="stag">Tech Stack</div>
+    <h2 class="stitle">Built with modern tools</h2>
+  </div>
+  <div class="tg">
+    <div class="tgr"><div class="tgt">Frontend</div><div class="chips"><span class="chip">React 18</span><span class="chip">TypeScript</span><span class="chip">Vite</span><span class="chip">Tailwind CSS</span><span class="chip">Zustand</span><span class="chip">React Router</span><span class="chip">Axios</span><span class="chip">Socket.io Client</span></div></div>
+    <div class="tgr"><div class="tgt">Backend</div><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">TypeScript</span><span class="chip">MongoDB</span><span class="chip">Mongoose</span><span class="chip">JWT Auth</span><span class="chip">Socket.io</span></div></div>
+    <div class="tgr"><div class="tgt">DevOps</div><div class="chips"><span class="chip">Vercel</span><span class="chip">Railway</span><span class="chip">MongoDB Atlas</span></div></div>
+  </div>
+</section>
+
+<section id="roadmap" style="background:var(--warm)">
+  <div style="text-align:center">
+    <div class="stag">Roadmap</div>
+    <h2 class="stitle">What's coming next</h2>
+  </div>
+  <div class="rm-g">
+    <div class="rm-c"><h3>✅ Phase 1 — MVP</h3><ul><li>JWT Authentication</li><li>Reading Tracker & Streaks</li><li>In-Browser PDF Reader</li><li>Book Clubs & Invite Codes</li><li>Real-Time Chat (Socket.io)</li><li>Book Voting System</li></ul></div>
+    <div class="rm-c"><h3>🚧 Phase 2 — Premium</h3><ul><li>Stripe-based Premium Tier</li><li>AI Reading Coach</li><li>Personalized Recommendations</li><li>Spoiler-Free Discussions</li></ul></div>
+  </div>
+</section>
+
+<footer>
+  <span class="fl">Ch<span>.</span>aptered</span>
+  <p>📚 Chaptered — Transforming reading into a shared experience.</p>
+  <p>Built by <strong style="color:var(--cream)">Vanshika Sharma</strong> · Open to collaborations and contributions</p>
+  <p style="margin-top:.4rem">Turning pages into progress and readers into communities.</p>
+</footer>
+<div id="tc"></div>
+
+<script>
+const DB={
+  B:'chaptered_books_v2',S:'chaptered_sessions_v2',
+  books(){try{return JSON.parse(localStorage.getItem(this.B)||'[]')}catch{return[]}},
+  sessions(){try{return JSON.parse(localStorage.getItem(this.S)||'[]')}catch{return[]}},
+  totalPages(){return this.sessions().reduce((a,s)=>a+(s.pages||0),0)},
+  streak(){
+    const ss=this.sessions();if(!ss.length)return 0;
+    const days=[...new Set(ss.map(s=>s.date))].sort().reverse();
+    const t=new Date().toISOString().slice(0,10),y=new Date(Date.now()-86400000).toISOString().slice(0,10);
+    if(days[0]!==t&&days[0]!==y)return 0;
+    let n=1;for(let i=1;i<days.length;i++){if((new Date(days[i-1])-new Date(days[i]))/86400000===1)n++;else break;}
+    return n;
+  }
+};
+function upd(){
+  const b=DB.books(),p=DB.totalPages(),s=DB.streak();
+  document.getElementById('hb').textContent=b.length;
+  document.getElementById('hp').textContent=p>=1000?(p/1000).toFixed(1)+'k':p;
+  document.getElementById('hs').textContent=s;
+}
+upd();
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');e.target.querySelectorAll('.fc,.hs,.rm-c,.bc').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*80))}})},{threshold:.08});
+document.querySelectorAll('.fg,.hg,.rm-g,.bg,.fc,.hs,.rm-c,.bc').forEach(el=>obs.observe(el));
+document.getElementById('mb').addEventListener('click',()=>document.getElementById('nl').classList.toggle('open'));
+document.querySelectorAll('#nl a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nl').classList.remove('open')));
+
 </script>
 </body>
 </html>
