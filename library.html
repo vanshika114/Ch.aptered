@@ -16,7 +16,6 @@
 }
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;min-height:100vh}
-/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(250,246,239,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .logo{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
 .logo span{color:var(--amber)}
@@ -27,7 +26,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-back{display:inline-flex;align-items:center;gap:.4rem;background:var(--warm);border:1px solid var(--border);border-radius:50px;padding:.35rem .9rem;font-size:.82rem;font-weight:600;color:var(--muted);text-decoration:none;transition:all .2s}
 .nav-back:hover{border-color:var(--amber);color:var(--ink)}
 .mbtn{display:none;background:none;border:none;cursor:pointer}
-/* HEADER */
 .ph{padding:7rem 5% 2.5rem;background:var(--ink);position:relative;overflow:hidden}
 .ph-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 90% 50%,rgba(212,134,58,.14),transparent 70%),radial-gradient(ellipse 40% 50% at 5% 30%,rgba(45,90,61,.1),transparent 70%)}
 .ph-wm{position:absolute;right:-1%;top:50%;transform:translateY(-50%);font-family:'Playfair Display',serif;font-size:16vw;font-weight:900;color:rgba(212,134,58,.05);line-height:1;pointer-events:none;user-select:none}
@@ -42,9 +40,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .psn{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--cream)}
 .psn.a{color:var(--al)}
 .psl{font-size:.72rem;color:rgba(250,246,239,.4);margin-top:.1rem;text-transform:uppercase;letter-spacing:.06em}
-/* LAYOUT */
 .layout{max-width:1200px;margin:0 auto;padding:2.5rem 5% 4rem;display:grid;grid-template-columns:250px 1fr;gap:2rem;align-items:start}
-/* SIDEBAR */
 .sb{position:sticky;top:88px;display:flex;flex-direction:column;gap:1rem}
 .sb-add{background:var(--amber);color:#fff;border:none;border-radius:var(--r);padding:1rem;width:100%;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 18px rgba(212,134,58,.35);transition:all .2s}
 .sb-add:hover{background:var(--al);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,134,58,.45)}
@@ -58,10 +54,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .ms-l{font-size:.82rem;color:var(--muted)}
 .ms-v{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink)}
 .ms-v.a{color:var(--amber)}
-/* PANELS */
 .panel{display:none}
 .panel.active{display:block;animation:fu .4s both}
-/* SHELF */
 .toolbar{display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem;flex-wrap:wrap}
 .sw{position:relative;flex:1;min-width:180px}
 .sw svg{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.4}
@@ -95,19 +89,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .bab{background:rgba(26,18,8,.72);backdrop-filter:blur(4px);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.72rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .bab:hover{background:rgba(26,18,8,.95)}
 .bab.del:hover{background:#c0392b}
-/* list view */
 .books-grid.lv .bcard{display:grid;grid-template-columns:70px 1fr auto;gap:0}
 .books-grid.lv .bcover{aspect-ratio:auto;height:90px;width:70px;border-radius:0;flex-shrink:0}
 .books-grid.lv .bbody{padding:.7rem 1rem;display:flex;flex-direction:column;justify-content:center}
 .books-grid.lv .bactions{position:static;opacity:1;flex-direction:column;justify-content:center;padding:.7rem .8rem .7rem 0}
-/* empty */
 .empty{text-align:center;padding:5rem 2rem;background:var(--card);border:2px dashed var(--border);border-radius:var(--rl)}
 .empty .ei{font-size:3.5rem;margin-bottom:1rem;display:block}
 .empty h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
 .empty p{color:var(--muted);font-size:.9rem;max-width:300px;margin:0 auto}
 .empty .eb{margin-top:1.2rem;background:var(--amber);color:#fff;border:none;border-radius:50px;padding:.75rem 1.8rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .2s}
 .empty .eb:hover{background:var(--al);transform:translateY(-2px)}
-/* FORM */
 .fc{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--sh)}
 .fc h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;margin-bottom:.4rem}
 .fc .fdesc{font-size:.88rem;color:var(--muted);margin-bottom:1.8rem;line-height:1.6}
@@ -126,6 +117,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .fu{border:2px dashed var(--border);border-radius:12px;padding:1.3rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.2rem;background:var(--warm)}
 .fu:hover{border-color:var(--amber)}
 .fu.has{border-color:var(--green);border-style:solid}
+.fu.drag{border-color:var(--amber);background:rgba(212,134,58,.06)}
 .fu p{font-size:.86rem;color:var(--muted)}
 .fu.has p{color:var(--green)}
 #fi{display:none}
@@ -134,7 +126,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,134,58,.45)}
 .btn-o{background:transparent;color:var(--ink);padding:.78rem 1.6rem;border-radius:50px;font-weight:600;font-size:.95rem;border:2px solid var(--border);transition:border-color .2s,background .2s;cursor:pointer;font-family:'DM Sans',sans-serif}
 .btn-o:hover{border-color:var(--amber);background:var(--warm)}
-/* TRACKER */
 .tstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-bottom:2rem}
 .ts{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;text-align:center;box-shadow:var(--sh)}
 .tsn{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--ink)}
@@ -167,7 +158,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .s-del:hover{color:#c0392b}
 .no-s{font-size:.88rem;color:var(--muted);text-align:center;padding:1.4rem}
 .done-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.75rem;font-weight:700;color:var(--green);background:rgba(45,90,61,.1);padding:.18rem .6rem;border-radius:50px}
-/* EDIT MODAL */
 .mo{position:fixed;inset:0;z-index:200;background:rgba(26,18,8,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
 .mo.open{opacity:1;pointer-events:all}
 .em{background:var(--card);border-radius:var(--rl);width:100%;max-width:580px;max-height:90vh;overflow-y:auto;padding:2.2rem;box-shadow:var(--sh-lg);transform:translateY(20px);transition:transform .3s}
@@ -176,7 +166,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .mh h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:900}
 .mc{background:var(--warm);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;transition:all .2s}
 .mc:hover{background:var(--border)}
-/* PDF READER */
 .ro{position:fixed;inset:0;z-index:300;background:rgba(10,7,3,.93);backdrop-filter:blur(10px);display:flex;align-items:stretch;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .ro.open{opacity:1;pointer-events:all}
 .rm{display:flex;flex-direction:column;width:100%;max-width:920px;background:var(--ink);border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);transform:translateY(16px);transition:transform .3s}
@@ -193,7 +182,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .ri{padding:1rem 1.4rem;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:2rem;flex-wrap:wrap;flex-shrink:0}
 .ri-item label{font-size:.68rem;color:rgba(250,246,239,.35);text-transform:uppercase;letter-spacing:.07em;display:block}
 .ri-item span{font-size:.88rem;color:var(--cream);font-weight:500}
-/* TOAST */
 #tc{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:.5rem}
 .toast{background:var(--ink);border:1px solid rgba(212,134,58,.35);color:var(--cream);padding:.65rem 1.2rem;border-radius:50px;font-size:.88rem;font-weight:500;animation:si .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.3)}
 .toast.err{border-color:rgba(192,57,43,.5)}
@@ -319,7 +307,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
               <option>Biography</option><option>Self-Help</option><option>History</option><option>Other</option>
             </select>
           </div>
-          <div class="fg"><label>Total Pages *</label><input type="number" id="bPages" placeholder="e.g. 256" min="1"/></div>
+          <div class="fg">
+            <label>Total Pages *</label>
+            <input type="number" id="bPages" placeholder="e.g. 256" min="1"/>
+            <span id="bPagesHint" style="font-size:.72rem;color:var(--muted);margin-top:.3rem;display:block"></span>
+          </div>
         </div>
         <div class="fg"><label>Description (optional)</label><textarea id="bDesc" rows="2" placeholder="A short note about this book…" style="resize:vertical"></textarea></div>
         <div class="fdiv"></div>
@@ -335,8 +327,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
           <div class="co" data-c="#5a2a1a" style="background:#5a2a1a"></div>
           <div class="co" data-c="#2a2a2a" style="background:#2a2a2a"></div>
         </div>
-        <div class="fu" id="ua" onclick="document.getElementById('fi').click()">
-          <p id="ul">📄 Upload PDF (optional) — click to browse</p>
+        <div class="fu" id="ua"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleDrop(event,'add')"
+          onclick="document.getElementById('fi').click()">
+          <p id="ul">📄 Upload PDF — drag & drop or click to browse</p>
+          <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem">⚠️ Max 100MB. Larger files will be auto-compressed.</p>
+          <div id="compress-progress" style="display:none;margin-top:.6rem">
+            <div style="height:4px;background:var(--border);border-radius:4px;overflow:hidden">
+              <div id="compress-bar" style="height:100%;background:var(--amber);width:0%;transition:width .3s;border-radius:4px"></div>
+            </div>
+            <p id="compress-label" style="font-size:.72rem;color:var(--amber);margin-top:.3rem">⏳ Compressing...</p>
+          </div>
           <input type="file" id="fi" accept=".pdf"/>
         </div>
         <div class="fa">
@@ -346,8 +349,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       </div>
     </div>
 
-
-<!-- PROGRESS -->
+    <!-- PROGRESS -->
     <div class="panel" id="p-progress">
       <div class="tstats" id="tstats"></div>
       <div class="lb">
@@ -369,7 +371,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       <div class="sh">Per-Book Progress</div>
       <div class="sw-wrap" id="sc"></div>
     </div>
-
   </main>
 </div>
 
@@ -393,7 +394,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
           <option>Biography</option><option>Self-Help</option><option>History</option><option>Other</option>
         </select>
       </div>
-      <div class="fg"><label>Total Pages *</label><input type="number" id="ePages" min="1"/></div>
+      <div class="fg">
+        <label>Total Pages *</label>
+        <input type="number" id="ePages" min="1"/>
+        <span id="ePagesHint" style="font-size:.72rem;color:var(--muted);margin-top:.3rem;display:block"></span>
+      </div>
     </div>
     <div class="fg"><label>Description</label><textarea id="eDesc" rows="2" style="resize:vertical"></textarea></div>
     <span class="cl">Cover Color</span>
@@ -409,8 +414,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     </div>
     <div class="fdiv" style="margin:1.2rem 0"></div>
     <span class="fsl">PDF (optional)</span>
-    <div class="fu" id="eua" onclick="document.getElementById('efi').click()" style="margin-bottom:1.2rem">
-      <p id="eul">📄 Click to attach or replace PDF</p>
+    <div class="fu" id="eua"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event,'edit')"
+      onclick="document.getElementById('efi').click()"
+      style="margin-bottom:1.2rem">
+      <p id="eul">📄 Click or drag & drop PDF to attach</p>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem">⚠️ Max 100MB. Larger files will be auto-compressed.</p>
+      <div id="ecompress-progress" style="display:none;margin-top:.6rem">
+        <div style="height:4px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div id="ecompress-bar" style="height:100%;background:var(--amber);width:0%;transition:width .3s;border-radius:4px"></div>
+        </div>
+        <p id="ecompress-label" style="font-size:.72rem;color:var(--amber);margin-top:.3rem">⏳ Compressing...</p>
+      </div>
       <input type="file" id="efi" accept=".pdf" style="display:none"/>
     </div>
     <div style="display:flex;gap:1rem;margin-top:.5rem">
@@ -438,10 +455,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 <div id="tc"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 const pdfFiles=new Map();
+const MAX_MB=100;
 
 const DB={
   B:'chaptered_books_v2',S:'chaptered_sessions_v2',
@@ -475,6 +494,7 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'
 const fmt=d=>new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 const pct=b=>Math.min(100,Math.round((DB.pagesFor(b.id)/b.pages)*100));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
 function toast(msg,type=''){
   const el=document.createElement('div');
   el.className='toast'+(type?' '+type:'');el.textContent=msg;
@@ -482,14 +502,119 @@ function toast(msg,type=''){
 }
 
 let addColor='#8B3A3A',editColor='#8B3A3A',editId=null,selFile=null,curView='grid';
+let detectedAddPages=null,detectedEditPages=null;
 
-// ── AUTO DETECT PDF PAGES ─────────────────────────────────────────────────────
+// ── AUTO DETECT PAGES ─────────────────────────────────────────────────────────
 async function detectPages(file){
   try{
     const buf=await file.arrayBuffer();
     const pdf=await pdfjsLib.getDocument({data:buf}).promise;
     return pdf.numPages;
   }catch{return null;}
+}
+
+// ── PDF COMPRESSOR (uses jsPDF — produces valid readable PDF) ─────────────────
+async function compressPDF(file,progressBarId,progressLabelId,progressWrapId){
+  const sizeMB=(file.size/1024/1024).toFixed(1);
+  if(file.size<=MAX_MB*1024*1024) return file;
+
+  toast(`📦 File is ${sizeMB}MB — auto-compressing...`);
+  document.getElementById(progressWrapId).style.display='block';
+  const bar=document.getElementById(progressBarId);
+  const label=document.getElementById(progressLabelId);
+
+  try{
+    const buf=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+    const totalPages=pdf.numPages;
+    const canvas=document.createElement('canvas');
+    const ctx=canvas.getContext('2d');
+    const quality=file.size>200*1024*1024?0.4:0.6;
+    const scale=file.size>200*1024*1024?0.8:1.0;
+    const {jsPDF}=window.jspdf;
+    let doc=null;
+
+    for(let i=1;i<=totalPages;i++){
+      const page=await pdf.getPage(i);
+      const viewport=page.getViewport({scale});
+      canvas.width=viewport.width;
+      canvas.height=viewport.height;
+      await page.render({canvasContext:ctx,viewport}).promise;
+      const imgData=canvas.toDataURL('image/jpeg',quality);
+      const w=viewport.width*0.75;
+      const h=viewport.height*0.75;
+      if(!doc){
+        doc=new jsPDF({orientation:w>h?'l':'p',unit:'pt',format:[w,h]});
+      }else{
+        doc.addPage([w,h],w>h?'l':'p');
+      }
+      doc.addImage(imgData,'JPEG',0,0,w,h);
+      const p=Math.round((i/totalPages)*100);
+      bar.style.width=p+'%';
+      label.textContent=`⏳ Compressing page ${i} of ${totalPages} (${p}%)...`;
+    }
+
+    const compressedBlob=doc.output('blob');
+    const compressedMB=(compressedBlob.size/1024/1024).toFixed(1);
+    label.textContent=`✓ Compressed: ${sizeMB}MB → ${compressedMB}MB`;
+    bar.style.width='100%';
+    toast(`✅ Compressed ${sizeMB}MB → ${compressedMB}MB`);
+    setTimeout(()=>document.getElementById(progressWrapId).style.display='none',2500);
+    return new File([compressedBlob],file.name,{type:'application/pdf'});
+  }catch(err){
+    console.error('Compression failed:',err);
+    label.textContent='⚠️ Compression failed — using original.';
+    toast('Compression failed — uploading original.','err');
+    setTimeout(()=>document.getElementById(progressWrapId).style.display='none',2500);
+    return file;
+  }
+}
+
+// ── DRAG & DROP ───────────────────────────────────────────────────────────────
+function handleDrop(e,form){
+  e.preventDefault();
+  document.getElementById(form==='add'?'ua':'eua').classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if(!file||file.type!=='application/pdf'){toast('Please drop a PDF file.','err');return;}
+  processFile(file,form);
+}
+
+async function processFile(file,form){
+  const isAdd=form==='add';
+  const labelId=isAdd?'ul':'eul';
+  const areaId=isAdd?'ua':'eua';
+  const barId=isAdd?'compress-bar':'ecompress-bar';
+  const lblId=isAdd?'compress-label':'ecompress-label';
+  const wrapId=isAdd?'compress-progress':'ecompress-progress';
+
+  document.getElementById(labelId).textContent='⏳ Processing...';
+  document.getElementById(areaId).classList.add('has');
+
+  const processed=await compressPDF(file,barId,lblId,wrapId);
+  const n=await detectPages(processed);
+
+  if(isAdd){
+    selFile=processed;
+    detectedAddPages=n;
+    document.getElementById(labelId).textContent=`✓ ${file.name}${n?' — '+n+' pages':''}`;
+    if(n){
+      const inp=document.getElementById('bPages');
+      inp.value=n;
+      inp.max=n;
+      document.getElementById('bPagesHint').textContent=`📄 ${n} pages detected from PDF — cannot exceed this.`;
+    }
+  }else{
+    editFile=processed;
+    detectedEditPages=n;
+    document.getElementById(labelId).textContent=`✓ ${file.name}${n?' — '+n+' pages':''}`;
+    if(n){
+      const inp=document.getElementById('ePages');
+      inp.value=n;
+      inp.max=n;
+      document.getElementById('ePagesHint').textContent=`📄 ${n} pages detected from PDF — cannot exceed this.`;
+    }
+  }
+  if(n) toast(`📄 Detected ${n} pages automatically`);
 }
 
 // ── HEADER STATS ──────────────────────────────────────────────────────────────
@@ -521,6 +646,7 @@ function sv(v){
   document.getElementById('lvb').classList.toggle('active',v==='list');
   document.getElementById('bg').classList.toggle('lv',v==='list');
 }
+
 function rShelf(){
   const q=(document.getElementById('si').value||'').toLowerCase();
   const genre=document.getElementById('fg').value;
@@ -565,7 +691,7 @@ function delBook(id){
   rStats();rShelf();if(document.getElementById('p-progress').classList.contains('active'))rProgress();
 }
 
-// ── OPEN BOOK (PDF READER) ────────────────────────────────────────────────────
+// ── OPEN BOOK ─────────────────────────────────────────────────────────────────
 let _blobUrl=null;
 function openBook(id){
   const b=DB.books().find(x=>x.id===id);if(!b)return;
@@ -589,6 +715,7 @@ function openBook(id){
   document.getElementById('ro').classList.add('open');
   document.body.style.overflow='hidden';
 }
+
 function closeReader(){
   document.getElementById('ro').classList.remove('open');
   document.getElementById('rBody').innerHTML='';
@@ -607,20 +734,14 @@ document.querySelectorAll('#ecr .co').forEach(el=>el.addEventListener('click',()
   el.classList.add('sel');editColor=el.dataset.c;
 }));
 
-// ── FILE UPLOAD (ADD FORM) — auto-detects pages ───────────────────────────────
+// ── FILE INPUT LISTENERS ──────────────────────────────────────────────────────
 document.getElementById('fi').addEventListener('change',async e=>{
   const f=e.target.files[0];if(!f)return;
-  selFile=f;
-  document.getElementById('ul').textContent='⏳ Reading PDF…';
-  document.getElementById('ua').classList.add('has');
-  const n=await detectPages(f);
-  if(n){
-    document.getElementById('bPages').value=n;
-    document.getElementById('ul').textContent=`✓ ${f.name} — ${n} pages detected`;
-    toast(`📄 Detected ${n} pages automatically`);
-  }else{
-    document.getElementById('ul').textContent=`✓ ${f.name}`;
-  }
+  await processFile(f,'add');
+});
+document.getElementById('efi').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  await processFile(f,'edit');
 });
 
 // ── ADD BOOK ──────────────────────────────────────────────────────────────────
@@ -632,6 +753,11 @@ function addBook(){
   const desc=document.getElementById('bDesc').value.trim();
   if(!title||!author){toast('Please fill in Title and Author.','err');return;}
   if(!pages||pages<1){toast('Enter a valid page count.','err');return;}
+  if(detectedAddPages&&pages>detectedAddPages){
+    toast(`Page count cannot exceed detected pages (${detectedAddPages}).`,'err');
+    document.getElementById('bPages').value=detectedAddPages;
+    return;
+  }
   const id=uid();
   const book={id,title,author,genre,pages,desc,color:addColor,hasPdf:!!selFile,addedAt:new Date().toISOString()};
   if(selFile){pdfFiles.set(id,selFile);}
@@ -640,31 +766,39 @@ function addBook(){
   toast('📚 "'+title+'" added!');
   rStats();sp('shelf');
 }
+
 function resetForm(){
   ['bTitle','bAuthor','bPages','bDesc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('ul').textContent='📄 Upload PDF (optional) — click to browse';
+  document.getElementById('bPages').max='';
+  document.getElementById('bPagesHint').textContent='';
+  document.getElementById('ul').textContent='📄 Upload PDF — drag & drop or click to browse';
   document.getElementById('ua').classList.remove('has');
-  document.getElementById('fi').value='';selFile=null;
+  document.getElementById('fi').value='';
+  selFile=null;detectedAddPages=null;
 }
 
 // ── EDIT ──────────────────────────────────────────────────────────────────────
 let editFile=null;
 function openEdit(id){
   const b=DB.books().find(x=>x.id===id);if(!b)return;
-  editId=id;editColor=b.color;editFile=null;
+  editId=id;editColor=b.color;editFile=null;detectedEditPages=null;
   document.getElementById('eTitle').value=b.title;
   document.getElementById('eAuthor').value=b.author;
   document.getElementById('ePages').value=b.pages;
+  document.getElementById('ePages').max='';
+  document.getElementById('ePagesHint').textContent='';
   document.getElementById('eDesc').value=b.desc||'';
   document.getElementById('eGenre').value=b.genre;
   document.querySelectorAll('#ecr .co').forEach(el=>el.classList.toggle('sel',el.dataset.c===b.color));
   const hasPdf=pdfFiles.has(id);
-  document.getElementById('eul').textContent=hasPdf?'✓ PDF in memory — click to replace':'📄 Click to attach or replace PDF';
+  document.getElementById('eul').textContent=hasPdf?'✓ PDF in memory — click to replace':'📄 Click or drag & drop PDF to attach';
   document.getElementById('eua').className='fu'+(hasPdf?' has':'');
   document.getElementById('efi').value='';
   document.getElementById('em').classList.add('open');
 }
-function closeEdit(){document.getElementById('em').classList.remove('open');editId=null;editFile=null;}
+
+function closeEdit(){document.getElementById('em').classList.remove('open');editId=null;editFile=null;detectedEditPages=null;}
+
 function saveEdit(){
   const title=document.getElementById('eTitle').value.trim();
   const author=document.getElementById('eAuthor').value.trim();
@@ -673,26 +807,17 @@ function saveEdit(){
   const genre=document.getElementById('eGenre').value;
   if(!title||!author){toast('Title and Author required.','err');return;}
   if(!pages||pages<1){toast('Enter a valid page count.','err');return;}
+  if(detectedEditPages&&pages>detectedEditPages){
+    toast(`Page count cannot exceed detected pages (${detectedEditPages}).`,'err');
+    document.getElementById('ePages').value=detectedEditPages;
+    return;
+  }
   if(editFile){pdfFiles.set(editId,editFile);}
   const hasPdf=pdfFiles.has(editId);
   DB.updateBook(editId,{title,author,pages,desc,genre,color:editColor,hasPdf});
   toast('✓ Book updated!');closeEdit();rStats();rShelf();
   if(document.getElementById('p-progress').classList.contains('active'))rProgress();
 }
-document.getElementById('efi').addEventListener('change',async e=>{
-  const f=e.target.files[0];if(!f)return;
-  editFile=f;
-  document.getElementById('eul').textContent='⏳ Reading PDF…';
-  document.getElementById('eua').classList.add('has');
-  const n=await detectPages(f);
-  if(n){
-    document.getElementById('ePages').value=n;
-    document.getElementById('eul').textContent=`✓ ${f.name} — ${n} pages detected`;
-    toast(`📄 Detected ${n} pages automatically`);
-  }else{
-    document.getElementById('eul').textContent=`✓ ${f.name} (will save on update)`;
-  }
-});
 document.getElementById('em').addEventListener('click',function(e){if(e.target===this)closeEdit();});
 
 // ── PROGRESS ──────────────────────────────────────────────────────────────────
@@ -777,11 +902,12 @@ function logSession(){
   if(p>=100)toast(`🎉 You finished "${book.title}"!`);
   rStats();rProgress();rShelf();
 }
+
 function delSess(id){
   DB.deleteSession(id);toast('Session removed.','err');rStats();rProgress();rShelf();
 }
 
-// ── KEYBOARD + OUTSIDE CLICK ──────────────────────────────────────────────────
+// ── KEYBOARD + MOBILE NAV ─────────────────────────────────────────────────────
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeReader();closeEdit();}});
 document.getElementById('mb').addEventListener('click',()=>document.getElementById('nl').classList.toggle('open'));
 document.querySelectorAll('#nl a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nl').classList.remove('open')));
