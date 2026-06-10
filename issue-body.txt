@@ -1,0 +1,8 @@
+Hi @vanshika114! I came across Chaptered and I'd love to help get the project started by working on the foundational setup you mentioned in the README.
+
+I plan to:
+- Scaffold the `chaptered-web` folder using Vite + React (TypeScript) and set up Tailwind CSS.
+- Migrate the existing HTML designs into basic React pages.
+- Scaffold the `chaptered-api` folder using Node.js, Express, and TypeScript.
+
+If this sounds good to you, I'll get started and submit a Pull Request from my fork!
