@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+
+  --color-ink: #1a1208;
+  --color-ink-soft: #2e2516;
+  --color-cream: #faf6ef;
+  --color-warm: #f2e8d9;
+  --color-warm-deep: #e8d9c4;
+  --color-amber: #d4863a;
+  --color-amber-lite: #f0b060;
+  --color-amber-deep: #b8722e;
+  --color-amber-glow: rgba(212,134,58,.15);
+  --color-green: #2d5a3d;
+  --color-green-lite: #4a8c62;
+  --color-muted: #7a6a55;
+  --color-muted-lite: #9a8a75;
+  --color-border: #e2d8c8;
+  --color-border-dark: #d5c8b4;
+  --color-card: #ffffff;
+
+  /* Dark-surface palette */
+  --color-d-bg: #1a1208;
+  --color-d-surface: rgba(255,255,255,.055);
+  --color-d-surface-hi: rgba(255,255,255,.09);
+  --color-d-border: rgba(255,255,255,.10);
+  --color-d-border-hi: rgba(255,255,255,.18);
+  --color-d-text: #faf6ef;
+  --color-d-text-muted: rgba(250,246,239,.50);
+  --color-d-text-dim: rgba(250,246,239,.30);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+}
