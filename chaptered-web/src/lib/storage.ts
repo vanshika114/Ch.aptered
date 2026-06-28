@@ -1,105 +1,80 @@
-/**
- * Centralized localStorage management for book tracking
- * Single source of truth for all data persistence
- */
-
 const KEYS = {
   BOOKS: 'chaptered_books_v2',
   SESSIONS: 'chaptered_sessions_v2',
-  FILES: 'chaptered_files_v2',
 } as const;
 
-// Type definitions
 export interface Book {
   id: string;
   title: string;
   author?: string;
-  totalPages: number;
-  currentPage: number;
-  rating?: number;
-  notes?: string;
-  cover?: string;
-  createdAt: string;
+  genre?: string;
+  pages: number;
+  desc?: string;
+  color?: string;
+  hasPdf?: boolean;
+  addedAt: string;
 }
 
 export interface ReadingSession {
   id: string;
   bookId: string;
-  pagesRead: number;
-  date: string; // ISO date string
-  duration?: number; // minutes
-  notes?: string;
+  pages: number;
+  note?: string;
+  date: string;
+  timestamp: string;
 }
 
-// Get/Set Books
 export const storage = {
   getBooks(): Book[] {
     try {
-      return JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
+      const json = localStorage.getItem(KEYS.BOOKS);
+      return json ? JSON.parse(json) : [];
     } catch {
       return [];
     }
   },
-
   saveBooks(books: Book[]): void {
-    localStorage.setItem(KEYS.BOOKS, JSON.stringify(books));
+    try { localStorage.setItem(KEYS.BOOKS, JSON.stringify(books)); } catch {}
   },
-
   addBook(book: Book): void {
     const books = this.getBooks();
     books.push(book);
     this.saveBooks(books);
   },
-
   updateBook(id: string, updates: Partial<Book>): void {
-    const books = this.getBooks();
-    const updated = books.map(b => b.id === id ? { ...b, ...updates } : b);
-    this.saveBooks(updated);
-  },
-
-  deleteBook(id: string): void {
-    const books = this.getBooks().filter(b => b.id !== id);
-    const sessions = this.getSessions().filter(s => s.bookId !== id);
+    const books = this.getBooks().map(b => (b.id === id ? { ...b, ...updates } : b));
     this.saveBooks(books);
-    this.saveSessions(sessions);
   },
-
-  // Get/Set Sessions
+  deleteBook(id: string): void {
+    this.saveBooks(this.getBooks().filter(b => b.id !== id));
+    this.saveSessions(this.getSessions().filter(s => s.bookId !== id));
+  },
   getSessions(): ReadingSession[] {
     try {
-      return JSON.parse(localStorage.getItem(KEYS.SESSIONS) || '[]');
+      const json = localStorage.getItem(KEYS.SESSIONS);
+      return json ? JSON.parse(json) : [];
     } catch {
       return [];
     }
   },
-
   saveSessions(sessions: ReadingSession[]): void {
-    localStorage.setItem(KEYS.SESSIONS, JSON.stringify(sessions));
+    try { localStorage.setItem(KEYS.SESSIONS, JSON.stringify(sessions)); } catch {}
   },
-
   addSession(session: ReadingSession): void {
     const sessions = this.getSessions();
     sessions.push(session);
     this.saveSessions(sessions);
   },
-
   deleteSession(id: string): void {
-    const sessions = this.getSessions().filter(s => s.id !== id);
-    this.saveSessions(sessions);
+    this.saveSessions(this.getSessions().filter(s => s.id !== id));
   },
-
-  // Queries
   getSessionsForBook(bookId: string): ReadingSession[] {
     return this.getSessions().filter(s => s.bookId === bookId);
   },
-
   getPagesReadForBook(bookId: string): number {
-    return this.getSessionsForBook(bookId).reduce((sum, s) => sum + s.pagesRead, 0);
+    return this.getSessionsForBook(bookId).reduce((sum, s) => sum + s.pages, 0);
   },
-
   getTotalPagesRead(): number {
-    return this.getSessions().reduce((sum, s) => sum + s.pagesRead, 0);
+    return this.getSessions().reduce((sum, s) => sum + s.pages, 0);
   },
 };
-
-export default storage;
