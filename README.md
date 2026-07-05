@@ -304,5 +304,3 @@ And we're just getting started.
 **Vanshika Sharma**
 
 Building Chaptered in public and always open to collaboration.
-
-If you're passionate about books, technology, or open source, come build with us.
