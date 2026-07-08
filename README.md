@@ -180,7 +180,7 @@ cd Ch.aptered
 ```bash
 cd chaptered-api
 npm install
-cp .env.example .env   # optionally add a GOOGLE_BOOKS_API_KEY — search works without one via a mock fallback
+cp .env.example .env   # Copy environment variables and configure them in .env
 npm run dev             # starts on http://localhost:3000
 ```
 
@@ -189,6 +189,7 @@ npm run dev             # starts on http://localhost:3000
 ```bash
 cd chaptered-web
 npm install
+cp .env.example .env   # Copy environment variables (optional)
 npm run dev              # starts on http://localhost:5173
 ```
 
