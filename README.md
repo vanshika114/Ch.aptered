@@ -197,6 +197,32 @@ Open `http://localhost:5173` and head to **Library** to start adding books.
 
 ---
 
+## 🧪 Running Tests
+
+You can run automated tests for both the frontend and backend locally.
+
+### Frontend Tests (`chaptered-web`)
+
+Frontend unit and component tests are built using **Vitest** and **React Testing Library**.
+
+```bash
+cd chaptered-web
+npm run test          # Run all tests once
+npm run test:watch    # Run tests in watch mode
+npm run test:coverage # Generate a test coverage report
+```
+
+### Backend Tests (`chaptered-api`)
+
+Backend API integration tests are built using **Jest** and **Supertest**.
+
+```bash
+cd chaptered-api
+npm run test          # Run backend test suite
+```
+
+---
+
 ## 🤝 How You Can Contribute
 
 There's a working foundation now, but plenty of the interesting work — auth, real persistence, clubs, real-time chat — hasn't been built yet.
