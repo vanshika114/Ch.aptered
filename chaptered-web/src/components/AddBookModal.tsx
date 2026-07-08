@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { compressPDF, detectPages } from '../lib/pdfUtils';
+import { LoadingButton } from './ui/LoadingButton';
 
 interface Props {
   isOpen: boolean;
@@ -125,12 +126,33 @@ export const AddBookModal = ({ isOpen, onClose, onAddBook }: Props) => {
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{ flex: 1, minWidth: 0, background: 'var(--warm)', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '.65rem 1rem', color: 'var(--ink)', fontFamily: 'inherit', fontSize: '.93rem', outline: 'none' }}
           />
-          <button className="btn" onClick={handleSearch} disabled={isSearching} style={{ opacity: isSearching ? .6 : 1, padding: '.65rem 1.4rem', lineHeight: 1 }}>
-            {isSearching ? '...' : 'Search'}
-          </button>
+          <LoadingButton onClick={handleSearch} loading={isSearching} style={{ padding: '.65rem 1.4rem', lineHeight: 1 }}>
+            Search
+          </LoadingButton>
         </div>
 
-        {searchResults.length > 0 && (
+        {isSearching && (
+          <div style={{ marginTop: '.75rem', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '.6rem', padding: '.25rem 0' }}>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.35rem', padding: '.7rem .4rem',
+                  borderRadius: '10px', border: '2px solid var(--border)', background: 'var(--warm)',
+                  textAlign: 'center', position: 'relative', overflow: 'hidden'
+                }}
+              >
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'var(--border-dark)', borderRadius: '8px 8px 0 0' }} />
+                <div style={{ width: 44, height: 64, borderRadius: 6 }} className="bg-warm-deep/60 animate-pulse" />
+                <div style={{ width: '60px', height: '10px', borderRadius: '4px' }} className="bg-warm-deep/60 animate-pulse mt-1" />
+                <div style={{ width: '45px', height: '8px', borderRadius: '4px' }} className="bg-warm-deep/60 animate-pulse mt-1" />
+                <div style={{ width: '50px', height: '18px', borderRadius: '6px' }} className="bg-warm-deep/60 animate-pulse mt-1.5" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!isSearching && searchResults.length > 0 && (
           <div style={{ marginTop: '.75rem', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '.6rem', maxHeight: '300px', overflowY: 'auto', padding: '.25rem 0' }}>
             {searchResults.map((r, i) => {
               const tint = CARD_TINTS[i % CARD_TINTS.length];
