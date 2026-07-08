@@ -26,30 +26,11 @@ export const Landing = () => {
       { threshold: 0.08 }
     );
     document.querySelectorAll('.fg,.hg,.rm-g,.bg,.fc,.hs,.rm-c,.bc').forEach((el) => obs.observe(el));
-
-    document.getElementById('mb')?.addEventListener('click', () =>
-      document.getElementById('nl')?.classList.toggle('open')
-    );
-    document.querySelectorAll('#nl a').forEach((a) =>
-      a.addEventListener('click', () => document.getElementById('nl')?.classList.remove('open'))
-    );
   }, []);
 
   return (
     <div>
-      <nav>
-        <a className="logo" href="/">Ch<span>.</span>aptered</a>
-        <ul className="nav-links" id="nl">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how">How it Works</a></li>
-          <li><a href="#why">Why Read</a></li>
-          <li><Link to="/library">Library</Link></li>
-          <li><a href="#roadmap">Roadmap</a></li>
-        </ul>
-        <button className="mbtn" id="mb" aria-label="Menu">
-          <svg width="22" height="22" viewBox="0 0 22 22"><rect y="3" width="22" height="2" rx="1" fill="#1a1208"/><rect y="10" width="22" height="2" rx="1" fill="#1a1208"/><rect y="17" width="22" height="2" rx="1" fill="#1a1208"/></svg>
-        </button>
-      </nav>
+
 
       <section className="hero">
         <div className="hero-bg"></div>

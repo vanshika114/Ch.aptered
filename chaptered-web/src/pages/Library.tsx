@@ -215,21 +215,7 @@ export const Library = () => {
 
   return (
     <div className="library">
-      {/* NAV */}
-      <nav>
-        <Link to="/" className="logo">Ch<span>.</span>aptered</Link>
-        <ul className="nav-links" id="nl">
-          <li><a href="/#features">Features</a></li>
-          <li><a href="/#how">How it Works</a></li>
-          <li><a href="/#why">Why Read</a></li>
-          <li><Link to="/library" className="active">Library</Link></li>
-          <li><a href="/#roadmap">Roadmap</a></li>
-        </ul>
-        <a className="nav-back" href="/">← Home</a>
-        <button className="mbtn" id="mb" aria-label="Menu" onClick={() => document.getElementById('nl')?.classList.toggle('open')}>
-          <svg width="22" height="22" viewBox="0 0 22 22"><rect y="3" width="22" height="2" rx="1" fill="#1a1208"/><rect y="10" width="22" height="2" rx="1" fill="#1a1208"/><rect y="17" width="22" height="2" rx="1" fill="#1a1208"/></svg>
-        </button>
-      </nav>
+
 
       {/* PAGE HERO */}
       <div className="ph">
