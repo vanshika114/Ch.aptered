@@ -6,6 +6,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import authRouter from './routes/auth';
+import readingSessionRoutes from './routes/readingSessionRoutes';
 
 // Define interface for search results if not shared elsewhere
 interface SearchResult {
@@ -41,6 +42,9 @@ mongoose.connect(MONGODB_URI)
 
 // Authentication routes
 app.use('/api/auth', authRouter);
+
+// Reading Session routes
+app.use('/api/sessions', readingSessionRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -115,6 +119,10 @@ io.on('connection', (socket) => {
 
 // --- Server Startup ---
 const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  httpServer.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+export { app, httpServer };
