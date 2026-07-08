@@ -4,6 +4,8 @@ import { useLibraryStore } from '../store/useLibraryStore';
 import { compressPDF, detectPages } from '../lib/pdfUtils';
 import { formatSessionDate } from '../lib/bookUtils';
 import { AddBookModal } from '../components/AddBookModal';
+import { BookListSkeleton } from '../components/ui/BookListSkeleton';
+import { Skeleton } from '../components/ui/Skeleton';
 import '../library.css';
 
 function toast(msg: string, type = '') {
@@ -39,6 +41,14 @@ export const Library = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [editId, setEditId] = useState<string | null>(null);
   const [readerBook, setReaderBook] = useState<string | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 850);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Edit form state
   const [eTitle, setETitle] = useState('');
@@ -226,10 +236,30 @@ export const Library = () => {
           <h1>Your <em>Library</em></h1>
           <p>Add, track, update, and read your books — all in one place. Upload PDFs to read them directly in Chaptered.</p>
           <div className="ph-stats">
-            <div className="phs"><div className="psn" id="hs-b">{stats.total}</div><div className="psl">Books</div></div>
-            <div className="phs"><div className="psn a" id="hs-p">{totalPagesRead >= 1000 ? (totalPagesRead / 1000).toFixed(1) + 'k' : totalPagesRead}</div><div className="psl">Pages Read</div></div>
-            <div className="phs"><div className="psn" id="hs-s">{sessionCount}</div><div className="psl">Sessions</div></div>
-            <div className="phs"><div className="psn a" id="hs-st">{streak} 🔥</div><div className="psl">Day Streak</div></div>
+            <div className="phs">
+              <div className="psn" id="hs-b">
+                {isPageLoading ? <Skeleton width="2rem" height="1.8rem" className="mx-auto" /> : stats.total}
+              </div>
+              <div className="psl">Books</div>
+            </div>
+            <div className="phs">
+              <div className="psn a" id="hs-p">
+                {isPageLoading ? <Skeleton width="3rem" height="1.8rem" className="mx-auto" /> : (totalPagesRead >= 1000 ? (totalPagesRead / 1000).toFixed(1) + 'k' : totalPagesRead)}
+              </div>
+              <div className="psl">Pages Read</div>
+            </div>
+            <div className="phs">
+              <div className="psn" id="hs-s">
+                {isPageLoading ? <Skeleton width="2.5rem" height="1.8rem" className="mx-auto" /> : sessionCount}
+              </div>
+              <div className="psl">Sessions</div>
+            </div>
+            <div className="phs">
+              <div className="psn a" id="hs-st">
+                {isPageLoading ? <Skeleton width="3rem" height="1.8rem" className="mx-auto" /> : `${streak} 🔥`}
+              </div>
+              <div className="psl">Day Streak</div>
+            </div>
           </div>
         </div>
       </div>
@@ -279,8 +309,10 @@ export const Library = () => {
                   <button className={`vb${viewMode === 'list' ? ' active' : ''}`} id="lvb" onClick={() => setViewMode('list')} title="List">☰</button>
                 </div>
               </div>
-              <div className="sh">My Books <span className="cnt" id="bcnt">{filtered.length}</span></div>
-              {filtered.length === 0 ? (
+              <div className="sh">My Books <span className="cnt" id="bcnt">{isPageLoading ? '...' : filtered.length}</span></div>
+              {isPageLoading ? (
+                <BookListSkeleton />
+              ) : filtered.length === 0 ? (
                 <div className="empty" id="se">
                   <span className="ei">📭</span>
                   <h3>Your shelf is empty</h3>
