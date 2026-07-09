@@ -4,6 +4,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import mongoose from 'mongoose';
+import authRouter from './routes/auth';
+import readingSessionRoutes from './routes/readingSessionRoutes';
 
 // Define interface for search results if not shared elsewhere
 interface SearchResult {
@@ -29,7 +32,19 @@ const io = new Server(httpServer, { // Initialize Socket.IO server
 app.use(cors());       // Enable CORS for all routes
 app.use(express.json()); // Parse incoming JSON requests
 
+// Connect to MongoDB
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/chaptered';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('[DB] MongoDB connected successfully'))
+  .catch((err) => console.error('[DB] MongoDB connection error:', err));
+
 // --- API Endpoints ---
+
+// Authentication routes
+app.use('/api/auth', authRouter);
+
+// Reading Session routes
+app.use('/api/sessions', readingSessionRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

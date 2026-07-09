@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLibraryStore } from '../store/useLibraryStore';
+import { useAuth } from '../context/AuthContext';
 import '../landing.css';
 
 export const Landing = () => {
+  const { isAuthenticated, logout, user } = useAuth();
   const books = useLibraryStore((s) => s.books);
   const sessions = useLibraryStore((s) => s.sessions);
 
@@ -26,17 +28,11 @@ export const Landing = () => {
       { threshold: 0.08 }
     );
     document.querySelectorAll('.fg,.hg,.rm-g,.bg,.fc,.hs,.rm-c,.bc').forEach((el) => obs.observe(el));
-
-    document.getElementById('mb')?.addEventListener('click', () =>
-      document.getElementById('nl')?.classList.toggle('open')
-    );
-    document.querySelectorAll('#nl a').forEach((a) =>
-      a.addEventListener('click', () => document.getElementById('nl')?.classList.remove('open'))
-    );
   }, []);
 
   return (
     <div>
+
       <nav>
         <a className="logo" href="/">Ch<span>.</span>aptered</a>
         <ul className="nav-links" id="nl">
@@ -45,6 +41,34 @@ export const Landing = () => {
           <li><a href="#why">Why Read</a></li>
           <li><Link to="/library">Library</Link></li>
           <li><a href="#roadmap">Roadmap</a></li>
+          {isAuthenticated ? (
+            <>
+              <li className="flex items-center text-muted font-bold text-sm tracking-wide">
+                @{user?.username}
+              </li>
+              <li>
+                <button
+                  onClick={logout}
+                  className="text-red-700 hover:text-red-800 font-bold text-sm cursor-pointer transition-colors"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/login" className="font-bold text-sm">
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link to="/signup" className="font-bold text-sm text-amber hover:text-amber-deep">
+                  Sign Up
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
         <button className="mbtn" id="mb" aria-label="Menu">
           <svg width="22" height="22" viewBox="0 0 22 22"><rect y="3" width="22" height="2" rx="1" fill="#1a1208"/><rect y="10" width="22" height="2" rx="1" fill="#1a1208"/><rect y="17" width="22" height="2" rx="1" fill="#1a1208"/></svg>

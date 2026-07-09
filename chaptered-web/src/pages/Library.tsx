@@ -6,6 +6,7 @@ import { formatSessionDate } from '../lib/bookUtils';
 import { AddBookModal } from '../components/AddBookModal';
 import { BookListSkeleton } from '../components/ui/BookListSkeleton';
 import { Skeleton } from '../components/ui/Skeleton';
+import { useAuth } from '../context/AuthContext';
 import '../library.css';
 
 function toast(msg: string, type = '') {
@@ -19,6 +20,7 @@ function toast(msg: string, type = '') {
 const COLORS = ['#8B3A3A', '#2d5a3d', '#3a4a8b', '#7a3a8b', '#8b6a2a', '#1a4a5a', '#5a2a1a', '#2a2a2a'];
 
 export const Library = () => {
+  const { logout, user } = useAuth();
   const books = useLibraryStore((s) => s.books);
   const sessions = useLibraryStore((s) => s.sessions);
   const addBook = useLibraryStore((s) => s.addBook);
@@ -225,6 +227,7 @@ export const Library = () => {
 
   return (
     <div className="library">
+
       {/* NAV */}
       <nav>
         <Link to="/" className="logo">Ch<span>.</span>aptered</Link>
@@ -234,6 +237,17 @@ export const Library = () => {
           <li><a href="/#why">Why Read</a></li>
           <li><Link to="/library" className="active">Library</Link></li>
           <li><a href="/#roadmap">Roadmap</a></li>
+          <li className="flex items-center text-muted font-bold text-sm tracking-wide">
+            @{user?.username}
+          </li>
+          <li>
+            <button
+              onClick={logout}
+              className="text-red-700 hover:text-red-800 font-bold text-sm cursor-pointer transition-colors"
+            >
+              Logout
+            </button>
+          </li>
         </ul>
         <a className="nav-back" href="/">← Home</a>
         <button className="mbtn" id="mb" aria-label="Menu" onClick={() => document.getElementById('nl')?.classList.toggle('open')}>
