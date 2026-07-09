@@ -28,17 +28,11 @@ export const Landing = () => {
       { threshold: 0.08 }
     );
     document.querySelectorAll('.fg,.hg,.rm-g,.bg,.fc,.hs,.rm-c,.bc').forEach((el) => obs.observe(el));
-
-    document.getElementById('mb')?.addEventListener('click', () =>
-      document.getElementById('nl')?.classList.toggle('open')
-    );
-    document.querySelectorAll('#nl a').forEach((a) =>
-      a.addEventListener('click', () => document.getElementById('nl')?.classList.remove('open'))
-    );
   }, []);
 
   return (
     <div>
+
       <nav>
         <a className="logo" href="/">Ch<span>.</span>aptered</a>
         <ul className="nav-links" id="nl">
