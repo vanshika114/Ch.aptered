@@ -1,5 +1,5 @@
 /* This file implements a React Class-based Error Boundary to catch UI rendering crashes and display a fallback screen. */
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { ErrorFallback } from './ErrorFallback';
 
 interface Props {
