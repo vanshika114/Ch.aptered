@@ -1,6 +1,6 @@
 /**
  * Jest configuration for chaptered-api testing.
- * Configures ts-jest preset, node test environment, ignores build dist directory, and matches test files.
+ * Configures ts-jest preset, node test environment, and matching rules for API tests.
  */
 module.exports = {
   preset: 'ts-jest',

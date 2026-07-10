@@ -113,7 +113,33 @@ Open `http://localhost:5173` in your browser to view the application!
 
 ---
 
-## 🤝 How to Contribute
+## 🧪 Running Tests
+
+You can run automated tests for both the frontend and backend locally.
+
+### Frontend Tests (`chaptered-web`)
+
+Frontend unit and component tests are built using **Vitest** and **React Testing Library**.
+
+```bash
+cd chaptered-web
+npm run test          # Run all tests once
+npm run test:watch    # Run tests in watch mode
+npm run test:coverage # Generate a test coverage report
+```
+
+### Backend Tests (`chaptered-api`)
+
+Backend API integration tests are built using **Jest** and **Supertest**.
+
+```bash
+cd chaptered-api
+npm run test          # Run backend test suite
+```
+
+---
+
+## 🤝 How You Can Contribute
 
 We welcome and appreciate all contributions! Whether you want to fix a bug, suggest features, improve documentation, or write tests.
 
