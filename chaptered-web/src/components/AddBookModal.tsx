@@ -223,7 +223,7 @@ export const AddBookModal = ({ isOpen, onClose, onAddBook }: Props) => {
         onDrop={async (e) => { e.preventDefault(); e.currentTarget.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) await handlePdf(f); }}
       >
         <p id="ul">{pdfLabel}</p>
-        <p style={{ fontSize: '.72rem', color: 'var(--muted)', marginTop: '.3rem' }}>⚠️ Max 100MB. Larger files will be auto-compressed.</p>
+        <p style={{ fontSize: '.72rem', color: 'var(--muted)', marginTop: '.3rem' }}>PDFs over 5MB will be auto-compressed.</p>
         <div id="add-wrap" style={{ display: 'none', marginTop: '.6rem' }}>
           <div style={{ height: '4px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
             <div id="add-bar" style={{ height: '100%', background: 'var(--amber)', width: '0%', transition: 'width .3s', borderRadius: '4px' }}></div>

@@ -16,7 +16,7 @@ export async function compressPDF(
   wrapId: string
 ): Promise<File> {
   const sizeMB = file.size / 1024 / 1024;
-  if (sizeMB <= 100) return file;
+  if (sizeMB <= 5) return file;
 
   const wrap = document.getElementById(wrapId);
   const bar = document.getElementById(barId);
@@ -31,8 +31,9 @@ export async function compressPDF(
     const totalPages = pdf.numPages;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
-    const quality = sizeMB > 200 ? 0.4 : 0.6;
-    const scale = sizeMB > 200 ? 0.8 : 1.0;
+
+    const quality = sizeMB > 200 ? 0.35 : sizeMB > 100 ? 0.5 : sizeMB > 50 ? 0.65 : sizeMB > 20 ? 0.75 : 0.85;
+    const scale = sizeMB > 200 ? 0.7 : sizeMB > 100 ? 0.85 : sizeMB > 50 ? 0.9 : 1.0;
     let doc: any = null;
 
     for (let i = 1; i <= totalPages; i++) {
@@ -61,7 +62,7 @@ export async function compressPDF(
 
     const compressedBlob = doc.output('blob');
     const compressedMB = (compressedBlob.size / 1024 / 1024).toFixed(1);
-    if (label) label.textContent = `Compressed: ${sizeMB.toFixed(1)}MB -> ${compressedMB}MB`;
+    if (label) label.textContent = `Compressed: ${sizeMB.toFixed(1)}MB -> ${compressedMB}MB (${sizeMB > 0 ? Math.round((1 - compressedBlob.size / file.size) * 100) : 0}% smaller)`;
     if (bar) bar.style.width = '100%';
     setTimeout(() => { if (wrap) wrap.style.display = 'none'; }, 2500);
     return new File([compressedBlob], file.name, { type: 'application/pdf' });

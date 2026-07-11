@@ -4,9 +4,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import mongoose from 'mongoose';
+import { initDatabase, isMongoDB, getDBType } from './db';
 import authRouter from './routes/auth';
 import readingSessionRoutes from './routes/readingSessionRoutes';
+import clubRoutes from './routes/clubRoutes';
+import voteRoutes from './routes/voteRoutes';
+import bookRoutes from './routes/bookRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+import { auth } from './middleware/auth';
+import { authLimiter, inviteLimiter, voteLimiter } from './middleware/rateLimiter';
+import { getDashboardStats } from './controllers/dashboardController';
 
 // Define interface for search results if not shared elsewhere
 interface SearchResult {
@@ -30,21 +37,47 @@ const io = new Server(httpServer, { // Initialize Socket.IO server
 
 // Middleware
 app.use(cors());       // Enable CORS for all routes
-app.use(express.json()); // Parse incoming JSON requests
+app.use(express.json({ limit: '50mb' })); // Parse incoming JSON requests (large limit for base64 PDFs)
+app.set('io', io); // Make Socket.IO accessible in controllers
 
-// Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/chaptered';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('[DB] MongoDB connected successfully'))
-  .catch((err) => console.error('[DB] MongoDB connection error:', err));
+// Initialize database (SQLite by default, MongoDB when DB_TYPE=mongodb)
+initDatabase();
 
 // --- API Endpoints ---
 
-// Authentication routes
-app.use('/api/auth', authRouter);
+// Self endpoint (not rate-limited — just checks token validity)
+app.get('/api/auth/me', auth, async (req, res) => {
+  try {
+    const { User } = require('./models/User');
+    const user = await User.findById((req as any).user?.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    return res.json({ id: user._id, username: user.username, email: user.email, createdAt: user.createdAt });
+  } catch (e) {
+    console.error('[Me Error]:', e);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Authentication routes (rate-limited: 10 req/15min)
+app.use('/api/auth', authLimiter, authRouter);
 
 // Reading Session routes
 app.use('/api/sessions', readingSessionRoutes);
+
+// Club routes
+app.use('/api/clubs', clubRoutes);
+
+// Vote routes
+app.use('/api/votes', voteRoutes);
+
+// Book routes (persistent storage)
+app.use('/api/books', bookRoutes);
+
+// Notification routes
+app.use('/api/notifications', notificationRoutes);
+
+// Dashboard stats (protected)
+app.get('/api/dashboard/stats', auth, getDashboardStats);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -108,9 +141,33 @@ app.get('/api/books/search', async (req, res) => {
 // --- Socket.IO Setup ---
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
-  
-  // Example: You could define socket events here for real-time features
-  // socket.on('join_club_room', (clubId) => { socket.join(clubId); });
+
+  socket.on('join_user', (userId: string) => {
+    socket.join(`user:${userId}`);
+    console.log(`Socket ${socket.id} joined user:${userId}`);
+  });
+
+  socket.on('join_club', (clubId: string) => {
+    socket.join(`club:${clubId}`);
+    console.log(`Socket ${socket.id} joined club:${clubId}`);
+  });
+
+  socket.on('leave_club', (clubId: string) => {
+    socket.leave(`club:${clubId}`);
+    console.log(`Socket ${socket.id} left club:${clubId}`);
+  });
+
+  socket.on('club_message', (data: { clubId: string; userId: string; username: string; text: string }) => {
+    const msg = {
+      ...data,
+      timestamp: new Date().toISOString(),
+    };
+    io.to(`club:${data.clubId}`).emit('club_message', msg);
+  });
+
+  socket.on('club_typing', (data: { clubId: string; userId: string; username: string }) => {
+    socket.to(`club:${data.clubId}`).emit('club_typing', data);
+  });
 
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);

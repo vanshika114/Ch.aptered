@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLibraryStore } from '../store/useLibraryStore';
 import { compressPDF, detectPages } from '../lib/pdfUtils';
@@ -28,6 +28,8 @@ export const Library = () => {
   const deleteBook = useLibraryStore((s) => s.deleteBook);
   const addSession = useLibraryStore((s) => s.addSession);
   const deleteSession = useLibraryStore((s) => s.deleteSession);
+  const fetchBooks = useLibraryStore((s) => s.fetchBooks);
+  const fetchSessions = useLibraryStore((s) => s.fetchSessions);
   const pagesFor = useLibraryStore((s) => s.pagesFor);
   const getBookProgress = useLibraryStore((s) => s.getBookProgress);
   const getTotalPagesRead = useLibraryStore((s) => s.getTotalPagesRead);
@@ -46,11 +48,13 @@ export const Library = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
+    fetchBooks();
+    fetchSessions();
     const timer = setTimeout(() => {
       setIsPageLoading(false);
     }, 850);
     return () => clearTimeout(timer);
-  }, []);
+  }, [fetchBooks, fetchSessions]);
 
   // Edit form state
   const [eTitle, setETitle] = useState('');
@@ -195,9 +199,39 @@ export const Library = () => {
     } catch { toast('PDF processing failed.', 'err'); setEPdfLabel('Processing failed'); }
   };
 
+  const [readerPdfBlob, setReaderPdfBlob] = useState<string | null>(null);
+  const readerPdfBlobRef = useRef<string | null>(null);
   const readerBookData = readerBook ? books.find((b) => b.id === readerBook) : null;
-  const readerPdfUrl = readerBookData ? getBookPdfUrl(readerBookData.id) : null;
+  const readerPdfUrl = readerPdfBlob;
   const readerProgress = readerBookData ? getBookProgress(readerBookData.id) : 0;
+
+  useEffect(() => {
+    if (!readerBookData?.hasPdf) { setReaderPdfBlob(null); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = localStorage.getItem('chaptered-token');
+        const res = await fetch(`/api/books/${readerBookData.id}/pdf`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) {
+          const errText = await res.text().catch(() => 'Unknown error');
+          console.error('PDF fetch failed:', res.status, errText);
+          throw new Error(errText || 'PDF not found');
+        }
+        const blob = await res.blob();
+        if (!cancelled) {
+          const url = URL.createObjectURL(blob);
+          if (readerPdfBlobRef.current) URL.revokeObjectURL(readerPdfBlobRef.current);
+          readerPdfBlobRef.current = url;
+          setReaderPdfBlob(url);
+        }
+      } catch (err) {
+        if (!cancelled) { setReaderPdfBlob(null); toast('Failed to load PDF.', 'err'); }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [readerBook]);
 
   const renderBookCard = (book: typeof books[0]) => {
     const p = getBookProgress(book.id);
@@ -311,6 +345,9 @@ export const Library = () => {
             <div className="ms"><span className="ms-l">In Progress</span><span className="ms-v" id="ms-r">{stats.reading}</span></div>
             <div className="ms"><span className="ms-l">Not Started</span><span className="ms-v" id="ms-u">{stats.notStarted}</span></div>
           </div>
+          <Link to="/clubs" className="sb-btn mt-4" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+            <span>📚</span> Book Clubs
+          </Link>
         </aside>
 
         <main>
@@ -486,7 +523,7 @@ export const Library = () => {
               onDrop={async (e) => { e.preventDefault(); e.currentTarget.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) await handleEditPdf(f); }}
             >
               <p id="eul">{ePdfLabel}</p>
-              <p style={{ fontSize: '.72rem', color: 'var(--muted)', marginTop: '.3rem' }}>⚠️ Max 100MB. Larger files will be auto-compressed.</p>
+              <p style={{ fontSize: '.72rem', color: 'var(--muted)', marginTop: '.3rem' }}>PDFs over 5MB will be auto-compressed.</p>
               <div id="ecompress-progress" style={{ display: 'none', marginTop: '.6rem' }}>
                 <div style={{ height: '4px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div id="ecompress-bar" style={{ height: '100%', background: 'var(--amber)', width: '0%', transition: 'width .3s', borderRadius: '4px' }}></div>
@@ -521,7 +558,7 @@ export const Library = () => {
                 <div className="no-pdf">
                   <div className="ni">📖</div>
                   <p>No PDF uploaded for this book.</p>
-                  <p style={{ fontSize: '.82rem', opacity: '.6' }}>PDFs are session-only — re-upload via Edit after refreshing.</p>
+                  <p style={{ fontSize: '.82rem', opacity: '.6' }}>Upload a PDF via the Edit option.</p>
                 </div>
               )}
             </div>

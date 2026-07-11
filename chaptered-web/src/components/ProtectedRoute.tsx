@@ -1,7 +1,3 @@
-/**
- * ProtectedRoute component for route protection.
- * Restricts access to authenticated users and handles the initial loading state.
- */
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -11,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, authError, retryAuth } = useAuth();
 
   if (isLoading) {
     return (
@@ -42,6 +38,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!isAuthenticated) {
+    if (authError) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-cream text-ink px-6">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md text-center">
+            <p className="text-red-600 font-bold text-lg mb-2">Connection Lost</p>
+            <p className="text-red-500 text-sm leading-relaxed">{authError}</p>
+            <button onClick={retryAuth} className="btn mt-5">Retry</button>
+          </div>
+        </div>
+      );
+    }
     return <Navigate to="/login" replace />;
   }
 

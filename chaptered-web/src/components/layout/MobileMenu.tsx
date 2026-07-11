@@ -1,6 +1,6 @@
-/* This component renders the slide-in mobile navigation menu. */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import type { User } from '../../context/AuthContext';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -8,7 +8,7 @@ interface MobileMenuProps {
   navLinks: Array<{ name: string; path: string }>;
   isActive: (path: string) => boolean;
   isAuthenticated: boolean;
-  onLogin: () => void;
+  user: User | null;
   onLogout: () => void;
 }
 
@@ -18,29 +18,22 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   navLinks,
   isActive,
   isAuthenticated,
-  onLogin,
+  user,
   onLogout,
 }) => {
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
+      if (event.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    if (isOpen) { document.body.style.overflow = 'hidden'; }
+    else { document.body.style.overflow = ''; }
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   return (
@@ -81,24 +74,22 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         </nav>
 
         <div className="mt-auto pt-6 border-t border-border/60">
-          {isAuthenticated ? (
+          {isAuthenticated && user ? (
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 px-3 mb-2">
-                <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
-                  alt="User avatar"
-                  className="w-10 h-10 rounded-full border border-border/80 object-cover"
-                />
+                <div className="w-10 h-10 rounded-full bg-amber text-white flex items-center justify-center text-sm font-bold">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
                 <div>
-                  <p className="text-sm font-bold text-ink-soft">Guest Reader</p>
-                  <p className="text-[10px] text-muted truncate">guest@chaptered.com</p>
+                  <p className="text-sm font-bold text-ink-soft">{user.username}</p>
+                  <p className="text-[10px] text-muted truncate">{user.email}</p>
                 </div>
               </div>
+              <Link to="/profile" onClick={onClose} className="w-full btn-o py-2.5 text-sm font-bold rounded-lg text-center">
+                My Profile
+              </Link>
               <button
-                onClick={() => {
-                  onLogout();
-                  onClose();
-                }}
+                onClick={() => { onLogout(); onClose(); }}
                 className="w-full btn-o py-2.5 text-sm font-bold rounded-lg text-red-600 border border-red-200 hover:bg-red-50 cursor-pointer"
               >
                 Sign Out
@@ -106,24 +97,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              <button
-                onClick={() => {
-                  onLogin();
-                  onClose();
-                }}
-                className="w-full btn-o py-2.5 text-sm font-bold rounded-lg cursor-pointer"
-              >
+              <Link to="/login" onClick={onClose} className="w-full btn-o py-2.5 text-sm font-bold rounded-lg text-center">
                 Sign In
-              </button>
-              <button
-                onClick={() => {
-                  onLogin();
-                  onClose();
-                }}
-                className="w-full btn py-2.5 text-sm font-bold rounded-lg shadow-sm cursor-pointer"
-              >
+              </Link>
+              <Link to="/signup" onClick={onClose} className="w-full btn py-2.5 text-sm font-bold rounded-lg shadow-sm text-center">
                 Sign Up
-              </button>
+              </Link>
             </div>
           )}
         </div>

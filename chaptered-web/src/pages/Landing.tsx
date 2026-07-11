@@ -31,7 +31,7 @@ export const Landing = () => {
   }, []);
 
   return (
-    <div>
+    <div className="landing-page">
 
       <nav>
         <a className="logo" href="/">Ch<span>.</span>aptered</a>
