@@ -8,7 +8,7 @@ interface AppLayoutProps {
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-cream flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
       <main id="main-content" className="flex-1 pt-16 outline-none" tabIndex={-1}>

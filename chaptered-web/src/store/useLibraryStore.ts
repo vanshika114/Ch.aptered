@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { generateId } from '../lib/bookUtils';
-import { compressPDF } from '../lib/pdfUtils';
+
 
 export interface Book {
   id: string;
@@ -24,50 +24,19 @@ export interface ReadingSession {
   timestamp: string;
 }
 
-interface LibraryStore {
-  books: Book[];
-  sessions: ReadingSession[];
-
-  addBook: (book: Omit<Book, 'id' | 'addedAt'> & { file?: File }) => Promise<void>;
-  updateBook: (id: string, patch: Partial<Book> & { file?: File }) => Promise<void>;
-  deleteBook: (id: string) => void;
-  addSession: (session: { bookId: string; pages: number; note?: string }) => void;
-  deleteSession: (id: string) => void;
-
-  getBookProgress: (bookId: string) => number;
-  getTotalPagesRead: () => number;
-  getStreak: () => number;
-  getBooksStats: () => { total: number; completed: number; reading: number; notStarted: number };
-  getSessionsForBook: (bookId: string) => ReadingSession[];
-  pagesFor: (bookId: string) => number;
-  getBookPdfUrl: (bookId: string) => string | null;
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(',')[1] || result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
-interface PdfState {
-  pdfBlobs: Map<string, string>;
-  addPdfBlob: (bookId: string, blobUrl: string) => void;
-  removePdfBlob: (bookId: string) => void;
-  getExistingPdfBlobUrl: (bookId: string) => string | null;
-}
-
-export const usePdfStore = create<PdfState>((set, get) => ({
-  pdfBlobs: new Map(),
-  addPdfBlob: (bookId, blobUrl) => {
-    const current = get().pdfBlobs;
-    if (current.has(bookId)) URL.revokeObjectURL(current.get(bookId)!);
-    current.set(bookId, blobUrl);
-    set({ pdfBlobs: new Map(current) });
-  },
-  removePdfBlob: (bookId) => {
-    const current = get().pdfBlobs;
-    if (current.has(bookId)) {
-      URL.revokeObjectURL(current.get(bookId)!);
-      current.delete(bookId);
-      set({ pdfBlobs: new Map(current) });
-    }
-  },
-  getExistingPdfBlobUrl: (bookId) => get().pdfBlobs.get(bookId) || null,
-}));
+const PDF_ENDPOINT = (id: string) => `/api/books/${id}/pdf`;
 
 function toast(msg: string, type = '') {
   const el = document.createElement('div');
@@ -77,34 +46,133 @@ function toast(msg: string, type = '') {
   if (c) { c.appendChild(el); setTimeout(() => el.remove(), 2800); }
 }
 
+function getToken(): string | null {
+  return localStorage.getItem('chaptered-token');
+}
+
+async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const token = getToken();
+  return fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+}
+
+function mapBackendBook(b: any): Book {
+  return {
+    id: b._id || b.id,
+    title: b.title,
+    author: b.author,
+    genre: b.genre || 'Fiction',
+    pages: b.pages || 0,
+    desc: b.desc || '',
+    color: b.color || '#8B3A3A',
+    hasPdf: b.hasPdf || false,
+    addedAt: b.createdAt || b.addedAt || new Date().toISOString(),
+  };
+}
+
+function mapBackendSession(s: any): ReadingSession {
+  return {
+    id: s._id || s.id,
+    bookId: s.bookId,
+    pages: s.pagesRead || s.pages || 0,
+    note: s.notes || s.note || '',
+    date: s.date || (s.createdAt ? new Date(s.createdAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)),
+    timestamp: s.createdAt || s.timestamp || new Date().toISOString(),
+  };
+}
+
 export const useLibraryStore = create<LibraryStore>()(
   persist(
     (set, get) => ({
       books: [],
       sessions: [],
 
+      fetchBooks: async () => {
+        try {
+          const res = await authFetch('/api/books');
+          if (res.ok) {
+            const data = await res.json();
+            const books = (data.books || []).map(mapBackendBook);
+            set({ books });
+          }
+        } catch {
+          // fallback to local state
+        }
+      },
+
+      fetchSessions: async () => {
+        try {
+          const res = await authFetch('/api/sessions?limit=500');
+          if (res.ok) {
+            const data = await res.json();
+            const sessions = (data.sessions || []).map(mapBackendSession);
+            set({ sessions });
+          }
+        } catch {
+          // fallback to local state
+        }
+      },
+
       addBook: async (input) => {
         const { file, ...rest } = input;
-        const id = generateId();
-        let hasPdf = false;
-        if (file) {
-          try {
-            const compressed = await compressPDF(file, 'compress-bar', 'compress-label', 'compress-progress');
-            const url = URL.createObjectURL(compressed);
-            usePdfStore.getState().addPdfBlob(id, url);
-            hasPdf = true;
-          } catch {
-            toast('PDF processing failed. Book added without PDF.', 'err');
+
+        try {
+          const res = await authFetch('/api/books', {
+            method: 'POST',
+            body: JSON.stringify({ ...rest, hasPdf: !!file, pages: Number(rest.pages) }),
+          });
+          if (res.ok) {
+            const newBook = await res.json();
+            const bookId = newBook._id || newBook.id;
+            let pdfOk = false;
+            if (file) {
+              try {
+                const base64 = await fileToBase64(file);
+                const pdfRes = await authFetch(PDF_ENDPOINT(bookId), {
+                  method: 'POST',
+                  body: JSON.stringify({ pdf: base64 }),
+                });
+                pdfOk = pdfRes.ok;
+              } catch {
+                toast('PDF upload failed.', 'warn');
+              }
+            }
+            set((s) => ({ books: [...s.books, mapBackendBook({ ...newBook, hasPdf: pdfOk })] }));
+            return;
           }
+          const errData = await res.json().catch(() => ({}));
+          toast(errData.error || errData.errors?.[Object.keys(errData.errors||{})[0]] || `Server error (${res.status})`, 'err');
+          return;
+        } catch {
+          // fallback to local when server unreachable
         }
+
+        const id = generateId();
         const newBook: Book = {
           ...rest,
           id,
           addedAt: new Date().toISOString(),
-          hasPdf,
+          hasPdf: !!file,
           pages: Number(rest.pages),
         };
         set((s) => ({ books: [...s.books, newBook] }));
+        if (file) {
+          try {
+            const base64 = await fileToBase64(file);
+            await authFetch(PDF_ENDPOINT(id), {
+              method: 'POST',
+              body: JSON.stringify({ pdf: base64 }),
+            });
+          } catch {
+            toast('PDF saved locally.', 'warn');
+          }
+        }
       },
 
       updateBook: async (id, updates) => {
@@ -112,9 +180,11 @@ export const useLibraryStore = create<LibraryStore>()(
         let hasPdf = get().books.find((b) => b.id === id)?.hasPdf || false;
         if (file) {
           try {
-            const compressed = await compressPDF(file, 'ecompress-bar', 'ecompress-label', 'ecompress-progress');
-            const url = URL.createObjectURL(compressed);
-            usePdfStore.getState().addPdfBlob(id, url);
+            const base64 = await fileToBase64(file);
+            await authFetch(PDF_ENDPOINT(id), {
+              method: 'POST',
+              body: JSON.stringify({ pdf: base64 }),
+            });
             hasPdf = true;
           } catch {
             toast('PDF update failed.', 'err');
@@ -125,17 +195,29 @@ export const useLibraryStore = create<LibraryStore>()(
             b.id === id ? { ...b, ...patch, pages: Number(patch.pages) || b.pages, hasPdf } : b
           ),
         }));
+        try {
+          await authFetch(`/api/books/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ ...patch, pages: Number(patch.pages), hasPdf }),
+          });
+        } catch {
+          // local only
+        }
       },
 
-      deleteBook: (id) => {
+      deleteBook: async (id) => {
         set((s) => ({
           books: s.books.filter((b) => b.id !== id),
           sessions: s.sessions.filter((sess) => sess.bookId !== id),
         }));
-        usePdfStore.getState().removePdfBlob(id);
+        try {
+          await authFetch(`/api/books/${id}`, { method: 'DELETE' });
+        } catch {
+          // local only
+        }
       },
 
-      addSession: (input) => {
+      addSession: async (input) => {
         const book = get().books.find((b) => b.id === input.bookId);
         if (!book) return;
         const newSession: ReadingSession = {
@@ -147,10 +229,30 @@ export const useLibraryStore = create<LibraryStore>()(
           timestamp: new Date().toISOString(),
         };
         set((s) => ({ sessions: [...s.sessions, newSession] }));
+        try {
+          await authFetch('/api/sessions', {
+            method: 'POST',
+            body: JSON.stringify({
+              bookId: input.bookId,
+              bookTitle: book.title,
+              bookAuthor: book.author,
+              pagesRead: input.pages,
+              notes: input.note || '',
+              status: 'reading',
+            }),
+          });
+        } catch {
+          // local only
+        }
       },
 
-      deleteSession: (id) => {
+      deleteSession: async (id) => {
         set((s) => ({ sessions: s.sessions.filter((sess) => sess.id !== id) }));
+        try {
+          await authFetch(`/api/sessions/${id}`, { method: 'DELETE' });
+        } catch {
+          // local only
+        }
       },
 
       getSessionsForBook: (bookId) =>
@@ -198,7 +300,10 @@ export const useLibraryStore = create<LibraryStore>()(
         return { total: books.length, completed, reading, notStarted };
       },
 
-      getBookPdfUrl: (bookId) => usePdfStore.getState().getExistingPdfBlobUrl(bookId),
+      getBookPdfUrl: (bookId) => {
+        const book = get().books.find((b) => b.id === bookId);
+        return book?.hasPdf ? PDF_ENDPOINT(bookId) : null;
+      },
     }),
     {
       name: 'chaptered-library-storage',

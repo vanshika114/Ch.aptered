@@ -16,9 +16,11 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  authError: string | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string; errors?: Record<string, string> }>;
   signup: (username: string, email: string, password: string) => Promise<{ success: boolean; error?: string; errors?: Record<string, string> }>;
   logout: () => void;
+  retryAuth: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,39 +29,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('chaptered-token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const initializeAuth = async () => {
+    const storedToken = localStorage.getItem('chaptered-token');
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    setAuthError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+        setToken(storedToken);
+        setAuthError(null);
+      } else if (response.status === 401) {
+        localStorage.removeItem('chaptered-token');
+        setUser(null);
+        setToken(null);
+      } else {
+        setAuthError(`Server error (${response.status}). Your session could not be verified.`);
+        setUser(null);
+        setToken(null);
+      }
+    } catch {
+      setAuthError('Cannot connect to server. Your session could not be verified.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      const storedToken = localStorage.getItem('chaptered-token');
-      if (!storedToken) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/auth/me', {
-          headers: {
-            'Authorization': `Bearer ${storedToken}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-          setToken(storedToken);
-        } else {
-          // Token expired or invalid
-          localStorage.removeItem('chaptered-token');
-          setUser(null);
-          setToken(null);
-        }
-      } catch (err) {
-        console.error('Failed to verify token on mount:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     initializeAuth();
   }, []);
 
@@ -131,8 +141,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isAuthenticated = !!user;
 
+  const retryAuth = () => {
+    initializeAuth();
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, authError, login, signup, logout, retryAuth }}>
       {children}
     </AuthContext.Provider>
   );
