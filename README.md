@@ -2,7 +2,6 @@
 
 ### Turn reading from a solo habit into a shared experience.
 
-[![ELUSoC 2026](https://img.shields.io/badge/ELUSoC-2026-blueviolet?style=for-the-badge)](https://github.com/vanshika114/Ch.aptered)
 
 **Chaptered** is an open-source, community-driven social reading platform designed for avid readers, book clubs, and anyone looking to turn reading from a solo habit into a shared experience. 
 
