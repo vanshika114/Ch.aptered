@@ -187,4 +187,5 @@ Chaptered is an experiment in building an open-source product from the ground up
 ## 👩‍💻 Maintainer
 
 **Vanshika Sharma**
+
 Building Chaptered in public and always open to collaboration.
