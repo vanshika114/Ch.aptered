@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand", "format": "prettier --write .",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
