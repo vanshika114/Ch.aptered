@@ -171,6 +171,15 @@ We welcome and appreciate all contributions! Whether you want to fix a bug, sugg
 
 ---
 
+## Contributors
+
+- @rohitkumarnaidu
+- @sanket1035
+- @Armankumar456
+- @shaili-dixit
+- @sasikumar161106
+
+
 ## 📜 License
 
 This project is licensed under the MIT License. Feel free to use, modify, and distribute it.
