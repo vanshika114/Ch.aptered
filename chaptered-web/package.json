@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .", "format": "prettier --write .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "axios": "^1.19.0",
     "lucide-react": "^1.31.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.8",

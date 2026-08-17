@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LoadingButton } from '../components/ui/LoadingButton';
 import { useUsernameCheck } from '../hooks/useUsernameCheck';
+import OTPVerification from '../components/auth/OTPVerification';
 
 export const SignupPage: React.FC = () => {
   const { signup } = useAuth();
@@ -15,6 +16,10 @@ export const SignupPage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // OTP verification state
+  const [step, setStep] = useState<'signup' | 'otp'>('signup');
+  const [pendingSignupData, setPendingSignupData] = useState<{ username: string; email: string; password: string } | null>(null);
 
   const validate = () => {
     const tempErrors: Record<string, string> = {};
@@ -31,15 +36,78 @@ export const SignupPage: React.FC = () => {
     e.preventDefault();
     setGeneralError(null);
     if (!validate()) return;
+
     setIsSubmitting(true);
-    const res = await signup(username, email, password);
-    setIsSubmitting(false);
-    if (res.success) navigate('/');
-    else if (res.errors) setErrors(res.errors);
-    else if (res.error) setGeneralError(res.error);
-    else setGeneralError('An unexpected error occurred.');
+
+    try {
+      const response = await fetch('/api/auth/request-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setGeneralError(data.error || 'Unable to send verification code. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      setPendingSignupData({ username, email, password });
+      setStep('otp');
+    } catch (error) {
+      console.error('OTP request error:', error);
+      setGeneralError('Unable to reach the server. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  const handleOTPSuccess = async (userData: any) => {
+    if (!pendingSignupData) return;
+
+    // Now complete the signup
+    setIsSubmitting(true);
+    const res = await signup(pendingSignupData.username, pendingSignupData.email, pendingSignupData.password);
+    setIsSubmitting(false);
+
+    if (res.success) {
+      navigate('/');
+    } else if (res.errors) {
+      setErrors(res.errors);
+      setStep('signup');
+      setPendingSignupData(null);
+    } else if (res.error) {
+      setGeneralError(res.error);
+      setStep('signup');
+      setPendingSignupData(null);
+    } else {
+      setGeneralError('An unexpected error occurred.');
+      setStep('signup');
+      setPendingSignupData(null);
+    }
+  };
+
+  const handleOTPBack = () => {
+    setStep('signup');
+    setPendingSignupData(null);
+  };
+
+  // Show OTP verification component
+  if (step === 'otp' && pendingSignupData) {
+    return (
+      <OTPVerification
+        email={pendingSignupData.email}
+        onSuccess={handleOTPSuccess}
+        onBack={handleOTPBack}
+      />
+    );
+  }
+
+  // Show signup form
   return (
     <div className="min-h-screen bg-cream flex">
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-ink to-ink-soft relative overflow-hidden items-center justify-center p-12">
@@ -180,7 +248,7 @@ export const SignupPage: React.FC = () => {
             </div>
 
             <LoadingButton type="submit" loading={isSubmitting} className="w-full justify-center !rounded-xl !py-[14px] !text-[16px] !shadow-lg mt-2">
-              Create Account
+              Continue to Email Verification
             </LoadingButton>
           </form>
 
