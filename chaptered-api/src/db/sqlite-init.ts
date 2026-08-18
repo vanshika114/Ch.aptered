@@ -18,9 +18,11 @@ function createTables(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       _id TEXT PRIMARY KEY,
-      username TEXT UNIQUE NOT NULL,
+      username TEXT,
       email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
+      password TEXT,
+      isEmailVerified INTEGER DEFAULT 0,
+      emailVerifiedAt TEXT,
       createdAt TEXT DEFAULT (datetime('now'))
     );
 
@@ -103,9 +105,29 @@ function createTables(db: Database.Database) {
       createdAt TEXT DEFAULT (datetime('now')),
       updatedAt TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS otps (
+      _id TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      otpHash TEXT NOT NULL,
+      expiresAt TEXT NOT NULL,
+      attempts INTEGER DEFAULT 0,
+      isVerified INTEGER DEFAULT 0,
+      verifiedAt TEXT,
+      createdAt TEXT DEFAULT (datetime('now')),
+      updatedAt TEXT DEFAULT (datetime('now'))
+    );
   `);
 
   // Migrations for existing databases
+  const userCols = db.prepare(`PRAGMA table_info(users)`).all() as any[];
+  if (!userCols.some((c: any) => c.name === 'isEmailVerified')) {
+    db.exec(`ALTER TABLE users ADD COLUMN isEmailVerified INTEGER DEFAULT 0`);
+  }
+  if (!userCols.some((c: any) => c.name === 'emailVerifiedAt')) {
+    db.exec(`ALTER TABLE users ADD COLUMN emailVerifiedAt TEXT`);
+  }
+
   const bookCols = db.prepare(`PRAGMA table_info(books)`).all() as any[];
   if (!bookCols.some((c: any) => c.name === 'pdf')) {
     db.exec(`ALTER TABLE books ADD COLUMN pdf BLOB`);
@@ -139,6 +161,7 @@ export function generateId(): string {
 
 function toSqlValue(val: any): any {
   if (val === undefined) return null;
+  if (val instanceof Date) return val.toISOString();
   if (typeof val === 'boolean') return val ? 1 : 0;
   return val;
 }
@@ -154,16 +177,34 @@ export function sqliteQuery(
 
   for (const [key, value] of Object.entries(conditions)) {
     if (value === undefined) continue;
-    if (value && typeof value === 'object' && '$ne' in value) {
-      where.push(`${key} != ?`);
-      params.push(toSqlValue(value.$ne));
-    } else if (value && typeof value === 'object' && '$in' in value) {
-      const placeholders = value.$in.map(() => '?').join(',');
-      where.push(`${key} IN (${placeholders})`);
-      params.push(...(value.$in as any[]).map(toSqlValue));
-    } else if (value && typeof value === 'object' && '$regex' in value) {
-      where.push(`${key} LIKE ?`);
-      params.push(`%${value.$regex}%`);
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if ('$ne' in value) {
+        where.push(`${key} != ?`);
+        params.push(toSqlValue(value.$ne));
+      } else if ('$in' in value) {
+        const placeholders = value.$in.map(() => '?').join(',');
+        where.push(`${key} IN (${placeholders})`);
+        params.push(...(value.$in as any[]).map(toSqlValue));
+      } else if ('$regex' in value) {
+        where.push(`${key} LIKE ?`);
+        params.push(`%${value.$regex}%`);
+      } else if ('$gt' in value) {
+        where.push(`${key} > ?`);
+        params.push(toSqlValue(value.$gt));
+      } else if ('$gte' in value) {
+        where.push(`${key} >= ?`);
+        params.push(toSqlValue(value.$gte));
+      } else if ('$lt' in value) {
+        where.push(`${key} < ?`);
+        params.push(toSqlValue(value.$lt));
+      } else if ('$lte' in value) {
+        where.push(`${key} <= ?`);
+        params.push(toSqlValue(value.$lte));
+      } else {
+        where.push(`${key} = ?`);
+        params.push(toSqlValue(value));
+      }
     } else {
       where.push(`${key} = ?`);
       params.push(toSqlValue(value));
@@ -197,9 +238,40 @@ export function sqliteCount(table: string, conditions: Record<string, any>) {
   const params: any[] = [];
   for (const [key, value] of Object.entries(conditions)) {
     if (value === undefined) continue;
-    where.push(`${key} = ?`);
-    params.push(toSqlValue(value));
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if ('$ne' in value) {
+        where.push(`${key} != ?`);
+        params.push(toSqlValue(value.$ne));
+      } else if ('$in' in value) {
+        const placeholders = value.$in.map(() => '?').join(',');
+        where.push(`${key} IN (${placeholders})`);
+        params.push(...(value.$in as any[]).map(toSqlValue));
+      } else if ('$regex' in value) {
+        where.push(`${key} LIKE ?`);
+        params.push(`%${value.$regex}%`);
+      } else if ('$gt' in value) {
+        where.push(`${key} > ?`);
+        params.push(toSqlValue(value.$gt));
+      } else if ('$gte' in value) {
+        where.push(`${key} >= ?`);
+        params.push(toSqlValue(value.$gte));
+      } else if ('$lt' in value) {
+        where.push(`${key} < ?`);
+        params.push(toSqlValue(value.$lt));
+      } else if ('$lte' in value) {
+        where.push(`${key} <= ?`);
+        params.push(toSqlValue(value.$lte));
+      } else {
+        where.push(`${key} = ?`);
+        params.push(toSqlValue(value));
+      }
+    } else {
+      where.push(`${key} = ?`);
+      params.push(toSqlValue(value));
+    }
   }
+
   let sql = `SELECT COUNT(*) as count FROM ${table}`;
   if (where.length > 0) sql += ` WHERE ${where.join(' AND ')}`;
   const row = d.prepare(sql).get(...params) as any;
@@ -229,9 +301,37 @@ export function sqliteDelete(table: string, conditions: Record<string, any>) {
   const params: any[] = [];
   for (const [key, value] of Object.entries(conditions)) {
     if (value === undefined) continue;
-    where.push(`${key} = ?`);
-    params.push(toSqlValue(value));
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if ('$ne' in value) {
+        where.push(`${key} != ?`);
+        params.push(toSqlValue(value.$ne));
+      } else if ('$in' in value) {
+        const placeholders = value.$in.map(() => '?').join(',');
+        where.push(`${key} IN (${placeholders})`);
+        params.push(...(value.$in as any[]).map(toSqlValue));
+      } else if ('$gt' in value) {
+        where.push(`${key} > ?`);
+        params.push(toSqlValue(value.$gt));
+      } else if ('$gte' in value) {
+        where.push(`${key} >= ?`);
+        params.push(toSqlValue(value.$gte));
+      } else if ('$lt' in value) {
+        where.push(`${key} < ?`);
+        params.push(toSqlValue(value.$lt));
+      } else if ('$lte' in value) {
+        where.push(`${key} <= ?`);
+        params.push(toSqlValue(value.$lte));
+      } else {
+        where.push(`${key} = ?`);
+        params.push(toSqlValue(value));
+      }
+    } else {
+      where.push(`${key} = ?`);
+      params.push(toSqlValue(value));
+    }
   }
+
   if (where.length === 0) return;
   d.prepare(`DELETE FROM ${table} WHERE ${where.join(' AND ')}`).run(...params);
 }

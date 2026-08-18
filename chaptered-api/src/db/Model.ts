@@ -66,6 +66,13 @@ export class Model<T extends Record<string, any>> {
     return sqliteCount(this.table, conditions);
   }
 
+  deleteMany(conditions: Record<string, any> = {}): number {
+    const matching = sqliteQuery(this.table, conditions);
+    if (matching.length === 0) return 0;
+    sqliteDelete(this.table, conditions);
+    return matching.length;
+  }
+
   create(data: Partial<T>): T {
     const doc = { _id: generateId(), ...data } as any;
     if (this.timestamps) {

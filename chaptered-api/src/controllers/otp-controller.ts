@@ -104,8 +104,8 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Get hash from database (it's not selected by default)
-    const otpWithHash = await OTP.findById(otpRecord._id).select('+otpHash');
+    // Get hash from database
+    const otpWithHash = await OTP.findById(otpRecord._id);
     if (!otpWithHash) {
       res.status(500).json({ error: 'OTP verification failed' });
       return;
@@ -142,18 +142,12 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
     // Mark OTP as verified
     await otpRecord.markAsVerified();
 
-    // Update user's email verification status
+    // Update existing user email verification status if a user record already exists.
+    // The signup form creates the user only after the OTP is validated, so there may be no
+    // user row yet at this step.
     let user = await User.findOne({ email: email.toLowerCase() });
 
-    if (!user) {
-      // Create new user if doesn't exist
-      user = await User.create({
-        email: email.toLowerCase(),
-        isEmailVerified: true,
-        emailVerifiedAt: new Date(),
-      });
-    } else {
-      // Update existing user
+    if (user) {
       user.isEmailVerified = true;
       user.emailVerifiedAt = new Date();
       await user.save();
@@ -163,9 +157,9 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
       success: true,
       message: 'Email verified successfully',
       user: {
-        id: user._id,
-        email: user.email,
-        isEmailVerified: user.isEmailVerified,
+        id: user?._id || null,
+        email: email.toLowerCase(),
+        isEmailVerified: Boolean(user?.isEmailVerified ?? true),
       },
     });
   } catch (error) {

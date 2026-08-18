@@ -119,29 +119,29 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 px-4">
-      <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8">
-        {/* Header */}
+    <div className="min-h-screen flex items-center justify-center bg-cream px-4 py-10">
+      <div className="bg-card border border-border-dark shadow-[0_18px_50px_rgba(42,31,25,0.08)] rounded-[28px] max-w-md w-full p-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Verify Your Email
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-amber/10 border border-amber/30 mb-4">
+            <span className="font-serif text-2xl font-black text-ink">C<span className="text-amber">.</span></span>
+          </div>
+          <h2 className="font-serif text-3xl font-black text-ink tracking-tight mb-2">
+            Verify your email
           </h2>
-          <p className="text-gray-600">
-            We sent a code to <span className="font-semibold">{email}</span>
+          <p className="text-sm text-muted">
+            We sent a 6-digit code to <span className="font-semibold text-ink-soft">{email}</span>
           </p>
         </div>
 
-        {/* Error Message */}
         {error && (
-          <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-xl">
             <p className="text-red-600 text-sm">{error}</p>
           </div>
         )}
 
-        {/* OTP Input Fields */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-4">
-            Enter 6-digit code
+          <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-muted mb-4 text-center">
+            Enter code
           </label>
           <div className="flex gap-2 justify-center">
             {otp.map((digit, index) => (
@@ -156,58 +156,54 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
                 value={digit}
                 onChange={(e) => handleOTPChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-12 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none transition"
+                className="w-12 h-12 text-center text-2xl font-bold border-2 border-border-dark rounded-xl bg-[#fffaf5] text-ink-soft focus:border-amber focus:outline-none focus:ring-2 focus:ring-amber/20 transition-all placeholder:text-muted-lite"
                 placeholder="•"
               />
             ))}
           </div>
         </div>
 
-        {/* Timer */}
         <div className="text-center mb-6">
           {timeLeft > 0 ? (
-            <p className="text-sm text-gray-600">
-              Code expires in <span className="font-semibold text-indigo-600">{formatTime(timeLeft)}</span>
+            <p className="text-sm text-muted">
+              Code expires in <span className="font-semibold text-amber">{formatTime(timeLeft)}</span>
             </p>
           ) : (
             <p className="text-sm text-red-600">Code has expired</p>
           )}
         </div>
 
-        {/* Verify Button */}
         <button
           onClick={handleSubmit}
           disabled={loading || otp.some((d) => !d)}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-lg transition mb-4"
+          className="w-full bg-ink hover:bg-ink-soft disabled:bg-muted-lite text-cream font-semibold py-3 rounded-xl transition mb-4 shadow-[0_12px_30px_rgba(25,18,14,0.18)]"
         >
           {loading ? 'Verifying...' : 'Verify Code'}
         </button>
 
-        {/* Resend OTP */}
         <div className="text-center text-sm">
           {canResend ? (
             <>
-              <span className="text-gray-600 mr-2">Didn't receive the code?</span>
+              <span className="text-muted mr-2">Didn't receive the code?</span>
               <button
                 onClick={handleResend}
                 disabled={loading}
-                className="text-indigo-600 hover:text-indigo-700 font-semibold"
+                className="text-amber hover:text-amber/80 font-semibold"
               >
                 Resend OTP
               </button>
             </>
           ) : (
-            <p className="text-gray-600">
-              You can resend the code after <span className="font-semibold">{formatTime(timeLeft)}</span>
+            <p className="text-muted">
+              You can resend the code after <span className="font-semibold text-ink-soft">{formatTime(timeLeft)}</span>
             </p>
           )}
         </div>
 
-        {/* Back Button */}
         <button
           onClick={onBack}
           disabled={loading}
-          className="w-full mt-4 py-2 text-gray-700 hover:text-gray-900 font-semibold"
+          className="w-full mt-4 py-2 text-muted hover:text-ink font-semibold"
         >
           ← Back
         </button>

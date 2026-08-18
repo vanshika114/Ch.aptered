@@ -23,3 +23,11 @@ export const voteLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+export const otpLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many OTP requests. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

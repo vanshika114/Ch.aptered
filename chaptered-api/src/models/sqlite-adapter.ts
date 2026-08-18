@@ -64,6 +64,10 @@ export function createSQLiteAdapter<T extends Record<string, any>>(name: string,
     return model.findOneAndUpdate(conditions, update);
   };
 
+  Constructor.deleteMany = (conditions: Record<string, any> = {}) => {
+    return model.deleteMany(conditions);
+  };
+
   Constructor.countDocuments = (conditions: Record<string, any> = {}) => model.countDocuments(conditions);
   Constructor.create = (data: Partial<T>) => model.create(data);
 

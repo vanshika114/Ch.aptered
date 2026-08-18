@@ -6,6 +6,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { initDatabase, isMongoDB, getDBType } from './db';
 import authRouter from './routes/auth';
+import otpRoutes from './routes/otp-routes';
 import readingSessionRoutes from './routes/readingSessionRoutes';
 import clubRoutes from './routes/clubRoutes';
 import voteRoutes from './routes/voteRoutes';
@@ -60,6 +61,9 @@ app.get('/api/auth/me', auth, async (req, res) => {
 
 // Authentication routes (rate-limited: 10 req/15min)
 app.use('/api/auth', authLimiter, authRouter);
+
+// OTP routes
+app.use('/api/auth', otpRoutes);
 
 // Reading Session routes
 app.use('/api/sessions', readingSessionRoutes);
